@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   emailCaptures,
@@ -104,4 +104,59 @@ export async function updateEmailStatus(
     .update(emailCaptures)
     .set({ emailSent: status })
     .where(eq(emailCaptures.id, id));
+}
+
+// ─── ADMIN HELPERS ────────────────────────────────────────────────────────────
+
+export async function getAllLeads() {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select({
+      id: emailCaptures.id,
+      email: emailCaptures.email,
+      firstName: emailCaptures.firstName,
+      archetypeId: emailCaptures.archetypeId,
+      emailSent: emailCaptures.emailSent,
+      createdAt: emailCaptures.createdAt,
+      submissionId: emailCaptures.submissionId,
+    })
+    .from(emailCaptures)
+    .orderBy(desc(emailCaptures.createdAt));
+}
+
+export async function getAdminStats() {
+  const db = await getDb();
+  if (!db) return { totalSubmissions: 0, totalCaptures: 0, conversionRate: 0, archetypeBreakdown: {} };
+
+  const [submissionCount] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(quizSubmissions);
+
+  const [captureCount] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(emailCaptures);
+
+  const archetypeRows = await db
+    .select({
+      archetypeId: emailCaptures.archetypeId,
+      count: sql<number>`count(*)`,
+    })
+    .from(emailCaptures)
+    .groupBy(emailCaptures.archetypeId);
+
+  const archetypeBreakdown: Record<string, number> = {};
+  for (const row of archetypeRows) {
+    archetypeBreakdown[row.archetypeId] = Number(row.count);
+  }
+
+  const total = Number(submissionCount?.count ?? 0);
+  const captures = Number(captureCount?.count ?? 0);
+
+  return {
+    totalSubmissions: total,
+    totalCaptures: captures,
+    conversionRate: total > 0 ? Math.round((captures / total) * 100) : 0,
+    archetypeBreakdown,
+  };
 }

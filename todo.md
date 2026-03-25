@@ -96,3 +96,24 @@
 - [x] Update email gate copy to be archetype-specific
 - [x] Adjust secondary archetype threshold to 80%
 - [x] Update tests to match new quiz question weights (23 passing)
+
+## Phase 9: Production Email + Sheets Debug
+- [ ] Check live server logs for email capture errors
+- [ ] Verify RESEND_API_KEY and GOOGLE_WORKSPACE_CLI_TOKEN are set in production env
+- [ ] Fix emailSender.ts root cause
+- [ ] Fix sheetsLogger.ts root cause
+- [ ] Run live end-to-end test
+- [ ] Verify Sheets row lands and email is delivered
+- [ ] Save checkpoint
+
+## Phase 10: Secure Admin Dashboard
+- [ ] Add adminProcedure (owner-only, role=admin gate) to tRPC
+- [ ] Add getLeads query returning all email_captures with submission data
+- [ ] Add getStats query returning archetype distribution and conversion rate
+- [ ] Build /admin route with Manus OAuth login gate
+- [ ] Build leads table: name, email, archetype, email status, date
+- [ ] Build stats row: total submissions, email captures, conversion rate, top archetype
+- [ ] Add CSV export button
+- [ ] Add /admin route to App.tsx
+- [ ] Write tests for admin procedures
+- [ ] Save checkpoint

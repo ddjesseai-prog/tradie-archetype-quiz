@@ -1,0 +1,90 @@
+{
+  "query": "SELECT id, email, firstName, archetypeId, emailSent, createdAt FROM email_captures ORDER BY createdAt DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute SELECT id, email, firstName, archetypeId, emailSent, createdAt FROM email_captures ORDER BY createdAt DESC LIMIT 20;",
+  "rows": [
+    {
+      "id": "90004",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Debug Test",
+      "archetypeId": "leader",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 11:31:57"
+    },
+    {
+      "id": "90003",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Live Test 2",
+      "archetypeId": "operator",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 11:30:00"
+    },
+    {
+      "id": "90002",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Live Test",
+      "archetypeId": "craftsman",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 11:29:31"
+    },
+    {
+      "id": "90001",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Test User",
+      "archetypeId": "hustler",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 11:27:56"
+    },
+    {
+      "id": "60002",
+      "email": "jordan.shay@live.com",
+      "firstName": "Jordan",
+      "archetypeId": "operator",
+      "emailSent": "failed",
+      "createdAt": "2026-03-25 09:24:08"
+    },
+    {
+      "id": "60001",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Jesse hunter",
+      "archetypeId": "operator",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 09:12:59"
+    },
+    {
+      "id": "30002",
+      "email": "manus-test@example.com",
+      "firstName": "Test",
+      "archetypeId": "craftsman",
+      "emailSent": "failed",
+      "createdAt": "2026-03-25 08:09:09"
+    },
+    {
+      "id": "30001",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Jesse",
+      "archetypeId": "hustler",
+      "emailSent": "failed",
+      "createdAt": "2026-03-25 08:06:21"
+    },
+    {
+      "id": "2",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "Jesse Hunter ",
+      "archetypeId": "operator",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 07:40:35"
+    },
+    {
+      "id": "1",
+      "email": "Jesse@dreamdealer.com.au",
+      "firstName": "Jesse Hunter",
+      "archetypeId": "hustler",
+      "emailSent": "sent",
+      "createdAt": "2026-03-25 07:36:23"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tfirstName\tarchetypeId\temailSent\tcreatedAt\n90004\tjesse@dreamdealer.com.au\tDebug Test\tleader\tsent\t2026-03-25 11:31:57\n90003\tjesse@dreamdealer.com.au\tLive Test 2\toperator\tsent\t2026-03-25 11:30:00\n90002\tjesse@dreamdealer.com.au\tLive Test\tcraftsman\tsent\t2026-03-25 11:29:31\n90001\tjesse@dreamdealer.com.au\tTest User\thustler\tsent\t2026-03-25 11:27:56\n60002\tjordan.shay@live.com\tJordan\toperator\tfailed\t2026-03-25 09:24:08\n60001\tjesse@dreamdealer.com.au\tJesse hunter\toperator\tsent\t2026-03-25 09:12:59\n30002\tmanus-test@example.com\tTest\tcraftsman\tfailed\t2026-03-25 08:09:09\n30001\tjesse@dreamdealer.com.au\tJesse\thustler\tfailed\t2026-03-25 08:06:21\n2\tjesse@dreamdealer.com.au\tJesse Hunter \toperator\tsent\t2026-03-25 07:40:35\n1\tJesse@dreamdealer.com.au\tJesse Hunter\thustler\tsent\t2026-03-25 07:36:23\n",
+  "stderr": "",
+  "execution_time_ms": 1552
+}

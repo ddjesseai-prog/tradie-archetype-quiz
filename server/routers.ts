@@ -5,8 +5,10 @@ import { calculateScores } from "../shared/scoring";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import {
+  getAdminStats,
+  getAllLeads,
   getQuizSubmissionById,
   saveEmailCapture,
   saveQuizSubmission,
@@ -203,6 +205,22 @@ export const appRouter = router({
           sheetsLogged: sheetsResult.success,
         };
       }),
+  }),
+
+  admin: router({
+    /**
+     * Get all email captures — admin only
+     */
+    getLeads: adminProcedure.query(async () => {
+      return getAllLeads();
+    }),
+
+    /**
+     * Get dashboard stats — admin only
+     */
+    getStats: adminProcedure.query(async () => {
+      return getAdminStats();
+    }),
   }),
 });
 
