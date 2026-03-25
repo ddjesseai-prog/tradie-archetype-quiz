@@ -36,3 +36,11 @@
 - [x] Test full flow end-to-end
 - [x] Update vitest tests for email router (23 passing)
 - [x] Save checkpoint
+
+## Phase 6: Email Gate UX Fix (Mobile)
+- [x] Add explicit "Get My Playbook" submit button after name/email fields
+- [x] Remove auto-unlock on mutation success — wait for button press
+- [x] On submit success: show full playbook inline (no new window needed, smooth scroll down)
+- [x] Add loading state on button while mutation is in-flight
+- [x] Add success confirmation banner after email sent
+- [x] Ensure skip option still works cleanly

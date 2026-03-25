@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useLocation, useSearch } from "wouter";
 import {
   ArrowRight,
@@ -20,15 +20,7 @@ import { ARCHETYPES } from "../../../shared/archetypes";
 import type { ArchetypeId, Archetype } from "../../../shared/archetypes";
 import { trpc } from "@/lib/trpc";
 
-// ─── PLAYBOOK SECTION COMPONENT ──────────────────────────────────────────────
-
-interface PlaybookSectionProps {
-  icon: React.ReactNode;
-  number: string;
-  title: string;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}
+// ─── PLAYBOOK SECTION ────────────────────────────────────────────────────────
 
 function PlaybookSection({
   icon,
@@ -36,7 +28,13 @@ function PlaybookSection({
   title,
   children,
   defaultOpen = false,
-}: PlaybookSectionProps) {
+}: {
+  icon: React.ReactNode;
+  number: string;
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="border border-border rounded-xl overflow-hidden">
@@ -45,9 +43,7 @@ function PlaybookSection({
         className="w-full flex items-center gap-4 px-5 py-4 bg-card hover:bg-secondary/30 transition-colors text-left"
       >
         <span className="text-primary">{icon}</span>
-        <span className="text-xs font-black text-primary/50 tracking-widest w-6">
-          {number}
-        </span>
+        <span className="text-xs font-black text-primary/50 tracking-widest w-6">{number}</span>
         <span className="font-bold flex-1">{title}</span>
         {open ? (
           <ChevronUp size={16} className="text-muted-foreground" />
@@ -64,135 +60,7 @@ function PlaybookSection({
   );
 }
 
-// ─── EMAIL GATE COMPONENT ─────────────────────────────────────────────────────
-
-interface EmailGateProps {
-  submissionId: number;
-  archetypeId: string;
-  secondaryArchetypeId?: string;
-  onUnlock: () => void;
-}
-
-function EmailGate({ submissionId, archetypeId, secondaryArchetypeId, onUnlock }: EmailGateProps) {
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [skipped, setSkipped] = useState(false);
-
-  const captureMutation = trpc.email.capture.useMutation({
-    onSuccess: () => {
-      onUnlock();
-    },
-    onError: () => {
-      // Still unlock even if email fails
-      onUnlock();
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    captureMutation.mutate({
-      submissionId,
-      email,
-      firstName: firstName || undefined,
-      archetypeId,
-      secondaryArchetypeId: secondaryArchetypeId || undefined,
-    });
-  };
-
-  const handleSkip = () => {
-    setSkipped(true);
-    onUnlock();
-  };
-
-  if (skipped) return null;
-
-  return (
-    <div className="relative">
-      {/* Blurred preview */}
-      <div className="relative rounded-2xl overflow-hidden border border-border">
-        <div
-          className="absolute inset-0 z-10"
-          style={{
-            background:
-              "linear-gradient(to bottom, transparent 0%, oklch(0.09 0.005 260 / 0.7) 40%, oklch(0.09 0.005 260) 100%)",
-          }}
-        />
-        <div className="blur-sm pointer-events-none select-none p-6 space-y-3">
-          {[
-            "Positioning: How to describe yourself and what to be known for...",
-            "Content Strategy: What to post, what to avoid, tone of voice...",
-            "Client Targeting: Who to attract and who to walk away from...",
-            "Pricing Strategy: Budget, mid-tier, or premium positioning...",
-            "Brand Identity: Visual direction and language style...",
-            "Growth Strategy: How you scale and what holds you back...",
-          ].map((line) => (
-            <div key={line} className="h-4 bg-secondary/50 rounded" />
-          ))}
-        </div>
-
-        {/* Lock overlay */}
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-6">
-          <div className="bg-background/95 backdrop-blur border border-border rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 border border-primary/30 mb-4">
-                <Lock size={20} className="text-primary" />
-              </div>
-              <h3 className="text-xl font-black mb-2">
-                Unlock Your Full Playbook
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Enter your email and we'll send your complete brand playbook
-                straight to your inbox. No spam. Just your results.
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="text"
-                placeholder="First name (optional)"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-              />
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
-              />
-              <button
-                type="submit"
-                disabled={!email || captureMutation.isPending}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-bold py-3.5 rounded-xl hover:bg-primary/90 transition-all disabled:opacity-50"
-              >
-                {captureMutation.isPending ? (
-                  "Sending..."
-                ) : (
-                  <>
-                    <Mail size={16} />
-                    Send My Playbook
-                  </>
-                )}
-              </button>
-            </form>
-
-            <button
-              onClick={handleSkip}
-              className="mt-3 w-full text-center text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
-            >
-              No thanks, just show me the results
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── SCORE BAR ────────────────────────────────────────────────────────────────
+// ─── SCORE BAR ───────────────────────────────────────────────────────────────
 
 function ScoreBar({
   archetype,
@@ -208,14 +76,10 @@ function ScoreBar({
       <span className="text-base w-6 text-center">{archetype.emoji}</span>
       <div className="flex-1">
         <div className="flex justify-between items-center mb-1">
-          <span
-            className={`text-xs font-semibold ${isPrimary ? "text-primary" : "text-muted-foreground"}`}
-          >
+          <span className={`text-xs font-semibold ${isPrimary ? "text-primary" : "text-muted-foreground"}`}>
             {archetype.name}
           </span>
-          <span
-            className={`text-xs font-bold ${isPrimary ? "text-primary" : "text-muted-foreground"}`}
-          >
+          <span className={`text-xs font-bold ${isPrimary ? "text-primary" : "text-muted-foreground"}`}>
             {percentage}%
           </span>
         </div>
@@ -230,7 +94,155 @@ function ScoreBar({
   );
 }
 
-// ─── MAIN RESULTS PAGE ────────────────────────────────────────────────────────
+// ─── EMAIL GATE ──────────────────────────────────────────────────────────────
+
+function EmailGate({
+  submissionId,
+  archetypeId,
+  secondaryArchetypeId,
+  onUnlock,
+}: {
+  submissionId: number;
+  archetypeId: string;
+  secondaryArchetypeId?: string;
+  onUnlock: (emailWasSent: boolean) => void;
+}) {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const captureMutation = trpc.email.capture.useMutation({
+    onSuccess: () => setSubmitted(true),
+    onError: () => setSubmitted(true), // still show success, unlock regardless
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || captureMutation.isPending) return;
+    captureMutation.mutate({
+      submissionId,
+      email,
+      firstName: firstName || undefined,
+      archetypeId,
+      secondaryArchetypeId: secondaryArchetypeId || undefined,
+    });
+  };
+
+  // ── After form submit: show confirmation + explicit open button ──
+  if (submitted) {
+    return (
+      <div className="rounded-2xl border border-primary/40 bg-primary/5 p-6 sm:p-8 text-center space-y-5">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/15 border border-primary/40 mx-auto">
+          <CheckCircle2 size={26} className="text-primary" />
+        </div>
+        <div>
+          <h3 className="text-xl font-black mb-1">You're in.</h3>
+          <p className="text-sm text-muted-foreground">
+            Your playbook is on its way to{" "}
+            <span className="text-foreground font-medium">{email}</span>.
+            Bookmark that email — it's your permanent link.
+          </p>
+        </div>
+        <button
+          onClick={() => onUnlock(true)}
+          className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-bold py-4 rounded-xl text-base hover:bg-primary/90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
+        >
+          <Unlock size={18} />
+          Open My Full Playbook
+          <ArrowRight size={18} />
+        </button>
+        <p className="text-xs text-muted-foreground/60">
+          Playbook also saved to your inbox as a permanent link.
+        </p>
+      </div>
+    );
+  }
+
+  // ── Default: form ──
+  return (
+    <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 space-y-5">
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 border border-primary/30 mb-4">
+          <Lock size={20} className="text-primary" />
+        </div>
+        <h3 className="text-xl font-black mb-2">Unlock Your Full Playbook</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Drop your details below. We'll show your playbook on screen and send a permanent link to your inbox.
+        </p>
+      </div>
+
+      {/* Blurred preview strip */}
+      <div className="rounded-xl overflow-hidden border border-border relative h-20">
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background: "linear-gradient(to bottom, oklch(0.12 0.005 260 / 0.3) 0%, oklch(0.09 0.005 260 / 0.95) 100%)",
+          }}
+        />
+        <div className="blur-sm pointer-events-none select-none p-4 space-y-2">
+          {["Positioning", "Content Strategy", "Client Targeting", "Pricing", "Brand Identity", "Growth Strategy"].map((label) => (
+            <div key={label} className="flex items-center gap-3">
+              <div className="h-2.5 w-2.5 rounded-full bg-primary/30 flex-shrink-0" />
+              <div className="h-2.5 bg-secondary/60 rounded flex-1" />
+            </div>
+          ))}
+        </div>
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <span className="text-xs font-bold tracking-widest uppercase text-muted-foreground/70">6 Sections Inside</span>
+        </div>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <input
+          type="text"
+          placeholder="First name (optional)"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          autoComplete="given-name"
+          className="w-full px-4 py-3.5 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+        />
+        <input
+          type="email"
+          placeholder="Your email address *"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          inputMode="email"
+          className="w-full px-4 py-3.5 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+        />
+        <button
+          type="submit"
+          disabled={!email || captureMutation.isPending}
+          className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-bold py-4 rounded-xl text-base hover:bg-primary/90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {captureMutation.isPending ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
+              Sending...
+            </span>
+          ) : (
+            <>
+              <Mail size={18} />
+              Get My Full Playbook
+              <ArrowRight size={18} />
+            </>
+          )}
+        </button>
+      </form>
+
+      <button
+        onClick={() => onUnlock(false)}
+        className="w-full text-center text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors py-1"
+      >
+        No thanks, just show me the results
+      </button>
+    </div>
+  );
+}
+
+// ─── MAIN RESULTS PAGE ───────────────────────────────────────────────────────
 
 export default function Results() {
   const [, navigate] = useLocation();
@@ -244,33 +256,34 @@ export default function Results() {
 
   const [playbookUnlocked, setPlaybookUnlocked] = useState(isUnlockedViaLink);
   const [emailSent, setEmailSent] = useState(false);
+  const playbookRef = useRef<HTMLDivElement>(null);
 
-  // Try to load from DB if we have a submissionId
   const { data: resultData } = trpc.quiz.getResult.useQuery(
     { submissionId },
     { enabled: submissionId > 0 },
   );
 
-  const primaryId =
-    (resultData?.primaryArchetype as ArchetypeId) ?? archetypeParam;
-  const secondaryId =
-    (resultData?.secondaryArchetype as ArchetypeId | null) ?? secondaryParam;
-  const percentages = resultData?.percentages as
-    | Record<ArchetypeId, number>
-    | undefined;
+  const primaryId = (resultData?.primaryArchetype as ArchetypeId) ?? archetypeParam;
+  const secondaryId = (resultData?.secondaryArchetype as ArchetypeId | null) ?? secondaryParam;
+  const percentages = resultData?.percentages as Record<ArchetypeId, number> | undefined;
 
   const archetype = primaryId ? ARCHETYPES[primaryId] : null;
   const secondaryArchetype = secondaryId ? ARCHETYPES[secondaryId] : null;
+
+  const handleUnlock = (emailWasSent: boolean) => {
+    setPlaybookUnlocked(true);
+    setEmailSent(emailWasSent);
+    setTimeout(() => {
+      playbookRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  };
 
   if (!archetype) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">No results found.</p>
-          <button
-            onClick={() => navigate("/quiz")}
-            className="text-primary hover:underline"
-          >
+          <button onClick={() => navigate("/quiz")} className="text-primary hover:underline">
             Take the quiz
           </button>
         </div>
@@ -278,20 +291,15 @@ export default function Results() {
     );
   }
 
-  const handleUnlock = () => {
-    setPlaybookUnlocked(true);
-    setEmailSent(true);
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* ── ARCHETYPE REVEAL ─────────────────────────────────────── */}
+
+      {/* ── ARCHETYPE REVEAL ──────────────────────────────────────── */}
       <section className="relative py-16 px-4 border-b border-border overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background:
-              "radial-gradient(ellipse 70% 50% at 50% 0%, oklch(0.65 0.18 42 / 0.1) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 70% 50% at 50% 0%, oklch(0.65 0.18 42 / 0.1) 0%, transparent 70%)",
           }}
         />
         <div className="max-w-2xl mx-auto text-center relative z-10">
@@ -300,35 +308,25 @@ export default function Results() {
               Your Archetype
             </span>
           </div>
-
           <div className="animate-fade-in-up opacity-0 delay-100">
             <div className="text-7xl sm:text-8xl mb-4">{archetype.emoji}</div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-3">
-              {archetype.name}
-            </h1>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-3">{archetype.name}</h1>
             <p className="text-lg sm:text-xl text-primary font-semibold italic mb-6">
               "{archetype.tagline}"
             </p>
           </div>
-
           <div className="animate-fade-in-up opacity-0 delay-200">
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
               {archetype.identityDescription}
             </p>
           </div>
-
-          {/* Secondary archetype badge */}
           {secondaryArchetype && (
             <div className="animate-fade-in-up opacity-0 delay-300 mt-6">
               <div className="inline-flex items-center gap-2 bg-secondary border border-border rounded-full px-4 py-2">
-                <span className="text-sm">
-                  {secondaryArchetype.emoji}
-                </span>
+                <span className="text-sm">{secondaryArchetype.emoji}</span>
                 <span className="text-xs text-muted-foreground">
                   Strong secondary:{" "}
-                  <span className="text-foreground font-semibold">
-                    {secondaryArchetype.name}
-                  </span>
+                  <span className="text-foreground font-semibold">{secondaryArchetype.name}</span>
                 </span>
               </div>
             </div>
@@ -336,14 +334,14 @@ export default function Results() {
         </div>
       </section>
 
+      {/* ── BODY ──────────────────────────────────────────────────── */}
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
-        {/* ── STRENGTHS & WEAKNESSES TEASER ────────────────────── */}
+
+        {/* Strengths & Weaknesses teaser */}
         <div className="animate-fade-in-up opacity-0 delay-100">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="text-xs font-black tracking-widest uppercase text-primary mb-4">
-                Your Strengths
-              </h3>
+              <h3 className="text-xs font-black tracking-widest uppercase text-primary mb-4">Your Strengths</h3>
               <ul className="space-y-2">
                 {archetype.strengths.slice(0, 3).map((s) => (
                   <li key={s} className="flex items-start gap-2 text-sm">
@@ -359,9 +357,7 @@ export default function Results() {
               </ul>
             </div>
             <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="text-xs font-black tracking-widest uppercase text-destructive/70 mb-4">
-                Watch Out For
-              </h3>
+              <h3 className="text-xs font-black tracking-widest uppercase text-destructive/70 mb-4">Watch Out For</h3>
               <ul className="space-y-2">
                 {archetype.weaknesses.slice(0, 3).map((w) => (
                   <li key={w} className="flex items-start gap-2 text-sm">
@@ -379,7 +375,7 @@ export default function Results() {
           </div>
         </div>
 
-        {/* ── SCORE BREAKDOWN ──────────────────────────────────── */}
+        {/* Score breakdown */}
         {percentages && (
           <div className="animate-fade-in-up opacity-0 delay-200 bg-card border border-border rounded-xl p-5">
             <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-5">
@@ -392,26 +388,20 @@ export default function Results() {
                   const a = ARCHETYPES[id as ArchetypeId];
                   if (!a) return null;
                   return (
-                    <ScoreBar
-                      key={id}
-                      archetype={a}
-                      percentage={pct}
-                      isPrimary={id === primaryId}
-                    />
+                    <ScoreBar key={id} archetype={a} percentage={pct} isPrimary={id === primaryId} />
                   );
                 })}
             </div>
           </div>
         )}
 
-        {/* ── EMAIL GATE / FULL PLAYBOOK ────────────────────────── */}
-        {!playbookUnlocked ? (
+        {/* ── EMAIL GATE ──────────────────────────────────────────── */}
+        {!playbookUnlocked && (
           <div className="animate-fade-in-up opacity-0 delay-300">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-black mb-2">Your Brand Playbook</h2>
               <p className="text-muted-foreground text-sm">
-                Everything you need to position, market, and grow your business
-                as {archetype.name}.
+                Everything you need to position, market, and grow your business as {archetype.name}.
               </p>
             </div>
             <EmailGate
@@ -421,11 +411,15 @@ export default function Results() {
               onUnlock={handleUnlock}
             />
           </div>
-        ) : (
-          <div className="animate-fade-in-up opacity-0">
+        )}
+
+        {/* ── FULL PLAYBOOK ────────────────────────────────────────── */}
+        {playbookUnlocked && (
+          <div ref={playbookRef} className="scroll-mt-4 space-y-6 animate-fade-in-up opacity-0">
+
             {/* Email sent confirmation */}
             {emailSent && (
-              <div className="flex items-center gap-3 bg-primary/10 border border-primary/30 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-3 bg-primary/10 border border-primary/30 rounded-xl p-4">
                 <CheckCircle2 size={18} className="text-primary flex-shrink-0" />
                 <p className="text-sm text-primary">
                   Your full playbook has been sent to your inbox.
@@ -433,24 +427,17 @@ export default function Results() {
               </div>
             )}
 
-            <div className="text-center mb-6">
+            <div className="text-center">
               <div className="inline-flex items-center gap-2 text-primary mb-3">
                 <Unlock size={18} />
                 <span className="text-sm font-semibold">Playbook Unlocked</span>
               </div>
-              <h2 className="text-2xl font-black">
-                {archetype.name} Brand Playbook
-              </h2>
+              <h2 className="text-2xl font-black">{archetype.name} Brand Playbook</h2>
             </div>
 
             {/* Playbook sections */}
             <div className="space-y-3">
-              <PlaybookSection
-                icon={<MessageSquare size={18} />}
-                number="01"
-                title="Positioning"
-                defaultOpen={true}
-              >
+              <PlaybookSection icon={<MessageSquare size={18} />} number="01" title="Positioning" defaultOpen={true}>
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
@@ -473,127 +460,71 @@ export default function Results() {
                 </div>
               </PlaybookSection>
 
-              <PlaybookSection
-                icon={<Rocket size={18} />}
-                number="02"
-                title="Content Strategy"
-              >
+              <PlaybookSection icon={<Rocket size={18} />} number="02" title="Content Strategy">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">
-                      What to post
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">What to post</p>
                     <ul className="space-y-1.5">
-                      {archetype.playbook.contentStrategy.whatToPost.map(
-                        (item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-2 text-sm"
-                          >
-                            <span className="text-primary mt-0.5 flex-shrink-0">
-                              ✓
-                            </span>
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ),
-                      )}
+                      {archetype.playbook.contentStrategy.whatToPost.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm">
+                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
+                          <span className="text-muted-foreground">{item}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">
-                      What NOT to post
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">What NOT to post</p>
                     <ul className="space-y-1.5">
-                      {archetype.playbook.contentStrategy.whatNotToPost.map(
-                        (item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-2 text-sm"
-                          >
-                            <span className="text-destructive/70 mt-0.5 flex-shrink-0">
-                              ✗
-                            </span>
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ),
-                      )}
+                      {archetype.playbook.contentStrategy.whatNotToPost.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm">
+                          <span className="text-destructive/70 mt-0.5 flex-shrink-0">✗</span>
+                          <span className="text-muted-foreground">{item}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <div className="bg-secondary/30 rounded-lg p-3">
-                      <p className="text-xs font-semibold text-muted-foreground mb-1">
-                        Tone of Voice
-                      </p>
-                      <p className="text-sm text-foreground">
-                        {archetype.playbook.contentStrategy.toneOfVoice}
-                      </p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Tone of Voice</p>
+                      <p className="text-sm text-foreground">{archetype.playbook.contentStrategy.toneOfVoice}</p>
                     </div>
                     <div className="bg-secondary/30 rounded-lg p-3">
-                      <p className="text-xs font-semibold text-muted-foreground mb-1">
-                        Filming Style
-                      </p>
-                      <p className="text-sm text-foreground">
-                        {archetype.playbook.contentStrategy.filmingStyle}
-                      </p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Filming Style</p>
+                      <p className="text-sm text-foreground">{archetype.playbook.contentStrategy.filmingStyle}</p>
                     </div>
                   </div>
                 </div>
               </PlaybookSection>
 
-              <PlaybookSection
-                icon={<Users size={18} />}
-                number="03"
-                title="Client Targeting"
-              >
+              <PlaybookSection icon={<Users size={18} />} number="03" title="Client Targeting">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">
-                      Who to attract
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">Who to attract</p>
                     <ul className="space-y-1.5">
-                      {archetype.playbook.clientTargeting.whoToAttract.map(
-                        (item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-2 text-sm"
-                          >
-                            <span className="text-primary mt-0.5 flex-shrink-0">
-                              ✓
-                            </span>
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ),
-                      )}
+                      {archetype.playbook.clientTargeting.whoToAttract.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm">
+                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
+                          <span className="text-muted-foreground">{item}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">
-                      Who to avoid
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">Who to avoid</p>
                     <ul className="space-y-1.5">
-                      {archetype.playbook.clientTargeting.whoToAvoid.map(
-                        (item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-2 text-sm"
-                          >
-                            <span className="text-destructive/70 mt-0.5 flex-shrink-0">
-                              ✗
-                            </span>
-                            <span className="text-muted-foreground">{item}</span>
-                          </li>
-                        ),
-                      )}
+                      {archetype.playbook.clientTargeting.whoToAvoid.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm">
+                          <span className="text-destructive/70 mt-0.5 flex-shrink-0">✗</span>
+                          <span className="text-muted-foreground">{item}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
               </PlaybookSection>
 
-              <PlaybookSection
-                icon={<DollarSign size={18} />}
-                number="04"
-                title="Pricing Strategy"
-              >
+              <PlaybookSection icon={<DollarSign size={18} />} number="04" title="Pricing Strategy">
                 <div>
                   <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/30 rounded-full px-3 py-1 mb-4">
                     <span className="text-xs font-bold text-primary uppercase tracking-wider">
@@ -610,111 +541,67 @@ export default function Results() {
                 </div>
               </PlaybookSection>
 
-              <PlaybookSection
-                icon={<Palette size={18} />}
-                number="05"
-                title="Brand Identity"
-              >
-                <div className="space-y-4">
+              <PlaybookSection icon={<Palette size={18} />} number="05" title="Brand Identity">
+                <div className="space-y-3">
                   {[
-                    {
-                      label: "Visual Direction",
-                      value: archetype.playbook.brandIdentity.visualDirection,
-                    },
-                    {
-                      label: "Language Style",
-                      value: archetype.playbook.brandIdentity.languageStyle,
-                    },
-                    {
-                      label: "Colour Palette",
-                      value: archetype.playbook.brandIdentity.colourPalette,
-                    },
+                    { label: "Visual Direction", value: archetype.playbook.brandIdentity.visualDirection },
+                    { label: "Language Style", value: archetype.playbook.brandIdentity.languageStyle },
+                    { label: "Colour Palette", value: archetype.playbook.brandIdentity.colourPalette },
                   ].map((item) => (
                     <div key={item.label} className="bg-secondary/30 rounded-lg p-4">
-                      <p className="text-xs font-semibold text-muted-foreground mb-1">
-                        {item.label}
-                      </p>
-                      <p className="text-sm text-foreground leading-relaxed">
-                        {item.value}
-                      </p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">{item.label}</p>
+                      <p className="text-sm text-foreground leading-relaxed">{item.value}</p>
                     </div>
                   ))}
                 </div>
               </PlaybookSection>
 
-              <PlaybookSection
-                icon={<TrendingUp size={18} />}
-                number="06"
-                title="Growth Strategy"
-              >
+              <PlaybookSection icon={<TrendingUp size={18} />} number="06" title="Growth Strategy">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">
-                      How you scale best
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">How you scale best</p>
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      {
-                        archetype.playbook.growthStrategy
-                          .howThisArchetypeScalesBest
-                      }
+                      {archetype.playbook.growthStrategy.howThisArchetypeScalesBest}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">
-                      What usually holds you back
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">What usually holds you back</p>
                     <ul className="space-y-1.5">
-                      {archetype.playbook.growthStrategy.commonBlockers.map(
-                        (b) => (
-                          <li
-                            key={b}
-                            className="flex items-start gap-2 text-sm"
-                          >
-                            <span className="text-destructive/70 mt-0.5 flex-shrink-0">
-                              !
-                            </span>
-                            <span className="text-muted-foreground">{b}</span>
-                          </li>
-                        ),
-                      )}
+                      {archetype.playbook.growthStrategy.commonBlockers.map((b) => (
+                        <li key={b} className="flex items-start gap-2 text-sm">
+                          <span className="text-destructive/70 mt-0.5 flex-shrink-0">!</span>
+                          <span className="text-muted-foreground">{b}</span>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
               </PlaybookSection>
             </div>
+
+            {/* Default behaviours */}
+            <div className="bg-card border border-border rounded-xl p-5">
+              <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-4">How You Show Up</h3>
+              <ul className="space-y-2">
+                {archetype.defaultBehaviours.map((b) => (
+                  <li key={b} className="flex items-start gap-2 text-sm">
+                    <span className="text-primary mt-0.5">→</span>
+                    <span className="text-muted-foreground">{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Market perception */}
+            <div className="bg-secondary/30 border border-border rounded-xl p-5">
+              <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-3">How the Market Sees You</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{archetype.marketPerception}</p>
+            </div>
+
           </div>
         )}
 
-        {/* ── DEFAULT BEHAVIOURS ───────────────────────────────── */}
-        {playbookUnlocked && (
-          <div className="bg-card border border-border rounded-xl p-5">
-            <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-4">
-              How You Show Up
-            </h3>
-            <ul className="space-y-2">
-              {archetype.defaultBehaviours.map((b) => (
-                <li key={b} className="flex items-start gap-2 text-sm">
-                  <span className="text-primary mt-0.5">→</span>
-                  <span className="text-muted-foreground">{b}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* ── MARKET PERCEPTION ────────────────────────────────── */}
-        {playbookUnlocked && (
-          <div className="bg-secondary/30 border border-border rounded-xl p-5">
-            <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-3">
-              How the Market Sees You
-            </h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {archetype.marketPerception}
-            </p>
-          </div>
-        )}
-
-        {/* ── RETAKE / SHARE ───────────────────────────────────── */}
+        {/* ── RETAKE / HOME ─────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
           <button
             onClick={() => navigate("/quiz")}
@@ -731,14 +618,16 @@ export default function Results() {
             <ArrowRight size={15} />
           </button>
         </div>
+
       </div>
 
-      {/* ── FOOTER ───────────────────────────────────────────────── */}
+      {/* ── FOOTER ────────────────────────────────────────────────── */}
       <footer className="border-t border-border py-8 px-4 text-center mt-8">
         <p className="text-xs text-muted-foreground">
           Tradie Brand Archetype Quiz — Built for Australian tradies.
         </p>
       </footer>
+
     </div>
   );
 }
