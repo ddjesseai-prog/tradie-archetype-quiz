@@ -64,7 +64,7 @@ export function calculateScores(answers: Record<string, string>): QuizResult {
   // and has at least 10% of the total score
   const secondaryArchetype =
     primaryScore > 0 &&
-    secondaryScore >= primaryScore * 0.85 &&
+    secondaryScore >= primaryScore * 0.80 &&
     percentages[sorted[1]] >= 10
       ? sorted[1]
       : null;

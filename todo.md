@@ -53,3 +53,46 @@
 - [x] Verified Resend send: 200 OK, email id b3c1c6b4 delivered
 - [x] All 23 tests passing
 - [x] Save checkpoint
+
+## Phase 8: Self-Assessment & Value Upgrade
+
+### Quiz Issues
+- [ ] Q3/Q8/Q19 are too similar — all test quality vs speed. Consolidate to 1, replace 2 with new categories
+- [ ] Likert questions (Q20-Q25) are too abstract and corporate-sounding for tradies
+- [ ] Q7 (difficult client) and Q15 (price match) overlap heavily — merge or replace one
+- [ ] Missing category: "What do you do on a Sunday arvo?" — personality/lifestyle signal
+- [ ] Missing category: social media behaviour — do they post, avoid it, or obsess over it
+- [ ] Scoring: Craftsman and Specialist are too close in most questions — hard to differentiate
+- [ ] Secondary archetype threshold (85%) is too tight — most users won't get one
+
+### Archetype Issues
+- [ ] Playbook content is good but too generic in places — needs specific tradie examples
+- [ ] "What to post" lists are too long (6 items) — trim to 3 killer ones
+- [ ] Growth strategy sections are strong but the "common blockers" are too similar across archetypes
+- [ ] The Hustler playbook undersells the pivot opportunity — needs a "your next move" section
+- [ ] Maverick and Leader overlap too much in brand identity and content strategy
+- [ ] Guardian archetype needs a stronger emotional hook — currently reads too passive
+
+### Results Page Issues
+- [ ] Teaser shows 3 strengths + 3 weaknesses — good, but the gate copy is weak
+- [ ] Email gate headline "Unlock Your Full Brand Playbook" is generic — needs archetype-specific hook
+- [ ] Post-unlock playbook sections are dense text walls — need visual hierarchy
+- [ ] No "your #1 action this week" moment — the most valuable thing missing
+
+### Fixes
+- [ ] Rewrite 6 weakest quiz questions with sharper tradie language
+- [ ] Add "your #1 action this week" to every archetype playbook
+- [ ] Make email gate headline archetype-specific
+- [ ] Add visual hierarchy to playbook sections (icons, callout boxes)
+- [ ] Tighten Likert questions to feel like real tradie decisions, not surveys
+- [ ] Adjust secondary archetype threshold to 80% for better coverage
+
+### Completed
+- [x] Rewrite all 25 quiz questions with sharper, more distinct tradie language
+- [x] Rewrite all 7 archetype playbooks with deeper, more specific content
+- [x] Add #1 Action This Week to every archetype
+- [x] Surface actionThisWeek as a hero callout on the results page
+- [x] Add Copy Results Link button to the playbook
+- [x] Update email gate copy to be archetype-specific
+- [x] Adjust secondary archetype threshold to 80%
+- [x] Update tests to match new quiz question weights (23 passing)

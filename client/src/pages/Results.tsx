@@ -15,6 +15,9 @@ import {
   Palette,
   Rocket,
   MessageSquare,
+  Zap,
+  Copy,
+  Check,
 } from "lucide-react";
 import { ARCHETYPES } from "../../../shared/archetypes";
 import type { ArchetypeId, Archetype } from "../../../shared/archetypes";
@@ -94,6 +97,30 @@ function ScoreBar({
   );
 }
 
+// ─── COPY LINK BUTTON ───────────────────────────────────────────────────────
+
+function CopyLinkButton() {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="w-full flex items-center justify-center gap-2 border border-border bg-card text-muted-foreground font-semibold py-3.5 rounded-xl hover:bg-secondary/50 hover:text-foreground transition-all text-sm"
+    >
+      {copied ? (
+        <><Check size={15} className="text-primary" /> Link copied to clipboard</>
+      ) : (
+        <><Copy size={15} /> Copy your results link</>
+      )}
+    </button>
+  );
+}
+
 // ─── EMAIL GATE ──────────────────────────────────────────────────────────────
 
 function EmailGate({
@@ -167,7 +194,7 @@ function EmailGate({
         </div>
         <h3 className="text-xl font-black mb-2">Unlock Your Full Playbook</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Drop your details below. We'll show your playbook on screen and send a permanent link to your inbox.
+          Your full {archetypeId.charAt(0).toUpperCase() + archetypeId.slice(1)} playbook is ready — positioning, content strategy, pricing, and your #1 action this week. Drop your details and we'll show it on screen and send a permanent link to your inbox.
         </p>
       </div>
 
@@ -236,7 +263,7 @@ function EmailGate({
         onClick={() => onUnlock(false)}
         className="w-full text-center text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors py-1"
       >
-        No thanks, just show me the results
+        Skip — just show me the playbook
       </button>
     </div>
   );
@@ -435,6 +462,17 @@ export default function Results() {
               <h2 className="text-2xl font-black">{archetype.name} Brand Playbook</h2>
             </div>
 
+            {/* #1 Action This Week — hero callout */}
+            <div className="bg-primary/10 border-2 border-primary/40 rounded-2xl p-5 sm:p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Zap size={18} className="text-primary" />
+                <span className="text-xs font-black tracking-widest uppercase text-primary">Your #1 Action This Week</span>
+              </div>
+              <p className="text-base sm:text-lg font-semibold leading-relaxed text-foreground">
+                {archetype.playbook.actionThisWeek}
+              </p>
+            </div>
+
             {/* Playbook sections */}
             <div className="space-y-3">
               <PlaybookSection icon={<MessageSquare size={18} />} number="01" title="Positioning" defaultOpen={true}>
@@ -578,6 +616,9 @@ export default function Results() {
                 </div>
               </PlaybookSection>
             </div>
+
+            {/* Copy results link */}
+            <CopyLinkButton />
 
             {/* Default behaviours */}
             <div className="bg-card border border-border rounded-xl p-5">

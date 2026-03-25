@@ -17,8 +17,8 @@ describe("calculateScores", () => {
 
   it("accumulates weights correctly for craftsman-aligned answers", () => {
     // q1a → craftsman: 3, specialist: 2
-    // q8a → craftsman: 3, specialist: 2
-    const answers = { q1: "q1a", q8: "q8a" };
+    // q2a → craftsman: 3, specialist: 2
+    const answers = { q1: "q1a", q2: "q2a" };
     const result = calculateScores(answers);
     expect(result.scores.craftsman).toBe(6);
     expect(result.scores.specialist).toBe(4);
@@ -26,20 +26,23 @@ describe("calculateScores", () => {
   });
 
   it("accumulates weights correctly for operator-aligned answers", () => {
-    // q9b → operator: 3, specialist: 1
-    // q16a → operator: 3, specialist: 1
-    const answers = { q9: "q9b", q16: "q16a" };
+    // q9b → operator: 3, hustler: 1
+    // q16b → operator: 3, hustler: 1
+    const answers = { q9: "q9b", q16: "q16b" };
     const result = calculateScores(answers);
     expect(result.scores.operator).toBe(6);
+    expect(result.scores.hustler).toBe(2);
     expect(result.primaryArchetype).toBe("operator");
   });
 
   it("accumulates weights correctly for hustler-aligned answers", () => {
-    // q3c → hustler: 3
-    // q14c → hustler: 3
-    const answers = { q3: "q3c", q14: "q14c" };
+    // q1b → hustler: 2, operator: 3
+    // Need a pure hustler answer: q9 has no pure hustler
+    // Use q2c → hustler: 3, guardian: 1 and q1b → operator: 3, hustler: 2
+    // Let's find a question where hustler=3 is the top weight
+    const answers = { q2: "q2c" }; // hustler: 3, guardian: 1
     const result = calculateScores(answers);
-    expect(result.scores.hustler).toBe(6);
+    expect(result.scores.hustler).toBe(3);
     expect(result.primaryArchetype).toBe("hustler");
   });
 
@@ -72,16 +75,18 @@ describe("calculateScores", () => {
   });
 
   it("assigns secondary archetype when scores are close", () => {
-    // Manually craft answers that split evenly between craftsman and specialist
+    // q8a → specialist: 3, craftsman: 2
     // q1a → craftsman: 3, specialist: 2
-    // q2a → specialist: 3, craftsman: 1
-    const answers = { q1: "q1a", q2: "q2a" };
+    // craftsman = 2+3 = 5, specialist = 3+2 = 5 → tied, both should show up
+    const answers = { q1: "q1a", q8: "q8a" };
     const result = calculateScores(answers);
-    // craftsman = 4, specialist = 5 → specialist primary, craftsman secondary (within 15%)
-    expect(result.primaryArchetype).toBe("specialist");
-    // craftsman (4) vs specialist (5): 4/5 = 0.8 ≥ 0.85? No, 0.8 < 0.85, so no secondary
-    // Let's verify the logic handles it gracefully either way
-    expect(typeof result.primaryArchetype).toBe("string");
+    expect(result.primaryArchetype).toBeDefined();
+    // With tied scores, secondary should be assigned (ratio = 1.0 ≥ 0.80)
+    expect(result.secondaryArchetype).not.toBeNull();
+    // Both craftsman and specialist should be in the top two
+    const top = [result.primaryArchetype, result.secondaryArchetype];
+    expect(top).toContain("craftsman");
+    expect(top).toContain("specialist");
   });
 
   it("handles invalid option IDs gracefully", () => {
