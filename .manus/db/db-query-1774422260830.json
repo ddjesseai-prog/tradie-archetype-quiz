@@ -1,0 +1,9 @@
+{
+  "query": "\nCREATE TABLE `email_captures` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`submissionId` int NOT NULL,\n\t`email` varchar(320) NOT NULL,\n\t`firstName` varchar(128),\n\t`archetypeId` varchar(32) NOT NULL,\n\t`emailSent` enum('pending','sent','failed') NOT NULL DEFAULT 'pending',\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `email_captures_id` PRIMARY KEY(`id`)\n);\nCREATE TABLE `quiz_submissions` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`sessionId` varchar(64) NOT NULL,\n\t`answers` json NOT NULL,\n\t`primaryArchetype` varchar(32) NOT NULL,\n\t`secondaryArchetype` varchar(32),\n\t`scores` json NOT NULL,\n\t`percentages` json NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `quiz_submissions_id` PRIMARY KEY(`id`)\n);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute \nCREATE TABLE `email_captures` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`submissionId` int NOT NULL,\n\t`email` varchar(320) NOT NULL,\n\t`firstName` varchar(128),\n\t`archetypeId` varchar(32) NOT NULL,\n\t`emailSent` enum('pending','sent','failed') NOT NULL DEFAULT 'pending',\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `email_captures_id` PRIMARY KEY(`id`)\n);\nCREATE TABLE `quiz_submissions` (\n\t`id` int AUTO_INCREMENT NOT NULL,\n\t`sessionId` varchar(64) NOT NULL,\n\t`answers` json NOT NULL,\n\t`primaryArchetype` varchar(32) NOT NULL,\n\t`secondaryArchetype` varchar(32),\n\t`scores` json NOT NULL,\n\t`percentages` json NOT NULL,\n\t`createdAt` timestamp NOT NULL DEFAULT (now()),\n\tCONSTRAINT `quiz_submissions_id` PRIMARY KEY(`id`)\n);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2340
+}
