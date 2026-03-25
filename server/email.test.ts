@@ -3,6 +3,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 // ─── Mock external side-effects before importing routers ─────────────────────
 
 vi.mock("./emailSender", () => ({
+  sendEmail: vi.fn().mockResolvedValue({ success: true }),
+  // keep backward-compat alias in mock too
   sendGmailEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
@@ -22,7 +24,7 @@ vi.mock("./db", () => ({
 }));
 
 import { appRouter } from "./routers";
-import { sendGmailEmail } from "./emailSender";
+import { sendEmail } from "./emailSender";
 import { logLeadToSheets } from "./sheetsLogger";
 import { saveEmailCapture, updateEmailStatus } from "./db";
 import type { TrpcContext } from "./_core/context";
@@ -45,7 +47,7 @@ function createPublicCtx(): TrpcContext {
 describe("email.capture", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (sendGmailEmail as ReturnType<typeof vi.fn>).mockResolvedValue({ success: true });
+    (sendEmail as ReturnType<typeof vi.fn>).mockResolvedValue({ success: true });
     (logLeadToSheets as ReturnType<typeof vi.fn>).mockResolvedValue({ success: true });
     (saveEmailCapture as ReturnType<typeof vi.fn>).mockResolvedValue(42);
     (updateEmailStatus as ReturnType<typeof vi.fn>).mockResolvedValue(undefined);
@@ -69,14 +71,14 @@ describe("email.capture", () => {
     );
   });
 
-  it("calls sendGmailEmail with correct recipient", async () => {
+  it("calls sendEmail with correct recipient", async () => {
     const caller = appRouter.createCaller(createPublicCtx());
     await caller.email.capture({
       submissionId: 1,
       email: "tradie@example.com",
       archetypeId: "craftsman",
     });
-    expect(sendGmailEmail).toHaveBeenCalledWith(
+    expect(sendEmail).toHaveBeenCalledWith(
       expect.objectContaining({
         to: "tradie@example.com",
       }),
@@ -90,21 +92,21 @@ describe("email.capture", () => {
       email: "tradie@example.com",
       archetypeId: "craftsman",
     });
-    const callArgs = (sendGmailEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    const callArgs = (sendEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(callArgs.subject).toContain("Craftsman");
   });
 
-  it("email content includes playbook link", async () => {
+  it("email text includes playbook link", async () => {
     const caller = appRouter.createCaller(createPublicCtx());
     await caller.email.capture({
       submissionId: 99,
       email: "tradie@example.com",
       archetypeId: "operator",
     });
-    const callArgs = (sendGmailEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(callArgs.content).toContain("submissionId=99");
-    expect(callArgs.content).toContain("archetype=operator");
-    expect(callArgs.content).toContain("unlocked=1");
+    const callArgs = (sendEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(callArgs.text).toContain("submissionId=99");
+    expect(callArgs.text).toContain("archetype=operator");
+    expect(callArgs.text).toContain("unlocked=1");
   });
 
   it("calls logLeadToSheets with correct data", async () => {
@@ -127,7 +129,7 @@ describe("email.capture", () => {
     );
   });
 
-  it("marks email as sent when Gmail succeeds", async () => {
+  it("marks email as sent when Resend succeeds", async () => {
     const caller = appRouter.createCaller(createPublicCtx());
     await caller.email.capture({
       submissionId: 1,
@@ -137,8 +139,8 @@ describe("email.capture", () => {
     expect(updateEmailStatus).toHaveBeenCalledWith(42, "sent");
   });
 
-  it("marks email as failed when Gmail fails", async () => {
-    (sendGmailEmail as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+  it("marks email as failed when Resend fails", async () => {
+    (sendEmail as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
       success: false,
       error: "Network error",
     });

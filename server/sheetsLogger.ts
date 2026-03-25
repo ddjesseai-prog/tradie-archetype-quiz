@@ -1,15 +1,12 @@
-import { execFile } from "child_process";
-import { promisify } from "util";
-
-const execFileAsync = promisify(execFile);
+/**
+ * Appends a lead row to the Tradie Quiz Google Sheet via the Sheets REST API.
+ * Uses the GOOGLE_WORKSPACE_CLI_TOKEN OAuth token which is available in both
+ * sandbox and deployed production environments.
+ */
 
 const SHEET_ID = "1ochv-YGKaxYAqAUgXbl-4qjyezPY6V6YYhNVoAeAGPQ";
 const SHEET_NAME = "Leads";
 
-/**
- * Appends a lead row to the Tradie Quiz Google Sheet.
- * Columns: Timestamp | First Name | Email | Primary Archetype | Secondary Archetype | Submission ID | Playbook Link
- */
 export async function logLeadToSheets({
   firstName,
   email,
@@ -25,6 +22,13 @@ export async function logLeadToSheets({
   submissionId: number;
   playbookLink: string;
 }): Promise<{ success: boolean; error?: string }> {
+  const token = process.env.GOOGLE_WORKSPACE_CLI_TOKEN;
+
+  if (!token) {
+    console.error("[Sheets] GOOGLE_WORKSPACE_CLI_TOKEN is not configured");
+    return { success: false, error: "Sheets token not configured" };
+  }
+
   const timestamp = new Date().toISOString().replace("T", " ").slice(0, 19);
 
   const row = [
@@ -37,47 +41,33 @@ export async function logLeadToSheets({
     playbookLink,
   ];
 
-  const params = JSON.stringify({
-    spreadsheetId: SHEET_ID,
-    range: `${SHEET_NAME}!A:G`,
-    valueInputOption: "RAW",
-  });
-
-  const body = JSON.stringify({
-    values: [row],
-  });
-
   try {
-    const { stdout, stderr } = await execFileAsync(
-      "gws",
-      [
-        "sheets",
-        "spreadsheets",
-        "values",
-        "append",
-        "--params",
-        params,
-        "--json",
-        body,
-      ],
-      { timeout: 15_000 },
-    );
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME + "!A:G")}:append?valueInputOption=RAW`;
 
-    const output = stdout + stderr;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ values: [row] }),
+    });
 
-    if (
-      output.includes("updatedRows") ||
-      output.includes("updatedCells") ||
-      output.includes("tableRange")
-    ) {
+    if (res.ok) {
+      const data = (await res.json()) as { updates?: { updatedRows?: number } };
+      console.log("[Sheets] Row appended, updatedRows:", data.updates?.updatedRows);
       return { success: true };
     }
 
-    if (!output.toLowerCase().includes("error") && output.trim().length > 0) {
-      return { success: true };
+    const errorBody = await res.text().catch(() => "");
+    console.error("[Sheets] API error:", res.status, errorBody.slice(0, 200));
+
+    // If token is expired (401), log clearly so it can be refreshed
+    if (res.status === 401) {
+      console.error("[Sheets] OAuth token expired — GOOGLE_WORKSPACE_CLI_TOKEN needs refresh");
     }
 
-    return { success: false, error: output.slice(0, 200) };
+    return { success: false, error: `Sheets API ${res.status}: ${errorBody.slice(0, 200)}` };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[Sheets] Log failed:", message);

@@ -44,3 +44,12 @@
 - [x] Add loading state on button while mutation is in-flight
 - [x] Add success confirmation banner after email sent
 - [x] Ensure skip option still works cleanly
+
+## Phase 7: Sheets + Email Production Fix
+- [x] Debug sheetsLogger.ts — CLI tools (gws, manus-mcp-cli) not available in deployed runtime
+- [x] Fix sheetsLogger to use Google Sheets REST API directly with GOOGLE_WORKSPACE_CLI_TOKEN
+- [x] Fix emailSender to use Resend REST API (re_X8YpgeC2 key stored as RESEND_API_KEY)
+- [x] Verified Sheets append: 200 OK, row lands in spreadsheet
+- [x] Verified Resend send: 200 OK, email id b3c1c6b4 delivered
+- [x] All 23 tests passing
+- [x] Save checkpoint

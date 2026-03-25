@@ -1,13 +1,57 @@
-import { execFile } from "child_process";
-import { promisify } from "util";
-
-const execFileAsync = promisify(execFile);
-
 /**
- * Sends a plain-text email via the connected Gmail account using the MCP CLI.
- * This is a server-side utility — called from tRPC procedures only.
+ * Sends transactional emails via the Resend API.
+ * Uses a direct REST call so it works in both sandbox and deployed production environments.
  */
-export async function sendGmailEmail({
+export async function sendEmail({
+  to,
+  subject,
+  text,
+}: {
+  to: string;
+  subject: string;
+  text: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
+
+  if (!apiKey) {
+    console.error("[Email] RESEND_API_KEY is not configured");
+    return { success: false, error: "Email service not configured" };
+  }
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: [to],
+        subject,
+        text,
+      }),
+    });
+
+    if (res.ok) {
+      const data = (await res.json()) as { id?: string };
+      console.log("[Email] Sent successfully, id:", data.id);
+      return { success: true };
+    }
+
+    const errorBody = await res.text().catch(() => "");
+    console.error("[Email] Resend API error:", res.status, errorBody);
+    return { success: false, error: `Resend ${res.status}: ${errorBody.slice(0, 200)}` };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[Email] Send failed:", message);
+    return { success: false, error: message };
+  }
+}
+
+// Keep backward-compatible alias so existing imports still work
+export const sendGmailEmail = ({
   to,
   subject,
   content,
@@ -15,46 +59,4 @@ export async function sendGmailEmail({
   to: string;
   subject: string;
   content: string;
-}): Promise<{ success: boolean; error?: string }> {
-  const messages = JSON.stringify([
-    {
-      to: [to],
-      subject,
-      content,
-    },
-  ]);
-
-  const input = JSON.stringify({ messages });
-
-  try {
-    const { stdout, stderr } = await execFileAsync(
-      "manus-mcp-cli",
-      ["tool", "call", "gmail_send_messages", "--server", "gmail", "--input", input],
-      { timeout: 30_000 },
-    );
-
-    const output = stdout + stderr;
-
-    // MCP CLI returns result saved to a file path — check for success indicators
-    if (
-      output.includes("result saved") ||
-      output.includes("mcp_result") ||
-      output.includes("Message sent") ||
-      output.includes("draft") ||
-      output.includes("id")
-    ) {
-      return { success: true };
-    }
-
-    // If we got output but no error keyword, treat as success
-    if (!output.toLowerCase().includes("error") && output.trim().length > 0) {
-      return { success: true };
-    }
-
-    return { success: false, error: output.slice(0, 200) };
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("[Gmail] Send failed:", message);
-    return { success: false, error: message };
-  }
-}
+}) => sendEmail({ to, subject, text: content });

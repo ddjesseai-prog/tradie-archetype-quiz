@@ -13,7 +13,7 @@ import {
   updateEmailStatus,
 } from "./db";
 import { buildPlaybookEmail } from "./emailTemplate";
-import { sendGmailEmail } from "./emailSender";
+import { sendEmail } from "./emailSender";
 import { logLeadToSheets } from "./sheetsLogger";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -158,11 +158,11 @@ export const appRouter = router({
           playbookLink,
         );
 
-        // ── 1. Send Gmail ────────────────────────────────────────────
-        const emailResult = await sendGmailEmail({
+        // ── 1. Send email via Resend ─────────────────────────────────
+        const emailResult = await sendEmail({
           to: input.email,
           subject,
-          content: text,
+          text,
         });
 
         if (emailResult.success) {
