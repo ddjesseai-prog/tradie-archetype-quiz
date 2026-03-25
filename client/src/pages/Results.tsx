@@ -69,10 +69,11 @@ function PlaybookSection({
 interface EmailGateProps {
   submissionId: number;
   archetypeId: string;
+  secondaryArchetypeId?: string;
   onUnlock: () => void;
 }
 
-function EmailGate({ submissionId, archetypeId, onUnlock }: EmailGateProps) {
+function EmailGate({ submissionId, archetypeId, secondaryArchetypeId, onUnlock }: EmailGateProps) {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [skipped, setSkipped] = useState(false);
@@ -95,6 +96,7 @@ function EmailGate({ submissionId, archetypeId, onUnlock }: EmailGateProps) {
       email,
       firstName: firstName || undefined,
       archetypeId,
+      secondaryArchetypeId: secondaryArchetypeId || undefined,
     });
   };
 
@@ -238,8 +240,9 @@ export default function Results() {
   const submissionId = parseInt(params.get("submissionId") ?? "0");
   const archetypeParam = params.get("archetype") as ArchetypeId | null;
   const secondaryParam = params.get("secondary") as ArchetypeId | null;
+  const isUnlockedViaLink = params.get("unlocked") === "1";
 
-  const [playbookUnlocked, setPlaybookUnlocked] = useState(false);
+  const [playbookUnlocked, setPlaybookUnlocked] = useState(isUnlockedViaLink);
   const [emailSent, setEmailSent] = useState(false);
 
   // Try to load from DB if we have a submissionId
@@ -414,6 +417,7 @@ export default function Results() {
             <EmailGate
               submissionId={submissionId}
               archetypeId={primaryId!}
+              secondaryArchetypeId={secondaryId ?? undefined}
               onUnlock={handleUnlock}
             />
           </div>

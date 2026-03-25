@@ -25,3 +25,14 @@
 - [x] Vitest: scoring engine unit tests
 - [x] Vitest: router tests
 - [x] Final checkpoint
+
+## Phase 5: Email Delivery & Sheets Integration
+- [x] Add Resend API key secret
+- [x] Install resend npm package (using Gmail MCP instead)
+- [x] Build shareable playbook URL (results page accessible via direct link with submissionId)
+- [x] Update email template to include shareable playbook link
+- [x] Wire Gmail MCP in server to actually send email on capture
+- [x] Google Sheets logging: append row on every email capture (email, name, archetype, timestamp)
+- [x] Test full flow end-to-end
+- [x] Update vitest tests for email router (23 passing)
+- [x] Save checkpoint

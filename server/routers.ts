@@ -3,7 +3,6 @@ import { z } from "zod";
 import { ARCHETYPES } from "../shared/archetypes";
 import { calculateScores } from "../shared/scoring";
 import { getSessionCookieOptions } from "./_core/cookies";
-import { invokeLLM } from "./_core/llm";
 import { notifyOwner } from "./_core/notification";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
@@ -14,6 +13,41 @@ import {
   updateEmailStatus,
 } from "./db";
 import { buildPlaybookEmail } from "./emailTemplate";
+import { sendGmailEmail } from "./emailSender";
+import { logLeadToSheets } from "./sheetsLogger";
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/**
+ * Build the shareable playbook URL from the request origin.
+ * Falls back to the production domain if origin is unavailable.
+ */
+function buildPlaybookLink(
+  req: { headers: Record<string, string | string[] | undefined> },
+  submissionId: number,
+  primaryArchetype: string,
+  secondaryArchetype?: string | null,
+): string {
+  // Prefer the Origin header, then X-Forwarded-Host, then the production domain
+  const origin =
+    (req.headers["origin"] as string) ||
+    (req.headers["x-forwarded-host"]
+      ? `https://${req.headers["x-forwarded-host"] as string}`
+      : null) ||
+    "https://tradiequiz-qnyesx8s.manus.space";
+
+  const url = new URL("/results", origin);
+  url.searchParams.set("submissionId", String(submissionId));
+  url.searchParams.set("archetype", primaryArchetype);
+  if (secondaryArchetype) {
+    url.searchParams.set("secondary", secondaryArchetype);
+  }
+  // Unlock the playbook immediately when visiting via the email link
+  url.searchParams.set("unlocked", "1");
+  return url.toString();
+}
+
+// ─── Router ──────────────────────────────────────────────────────────────────
 
 export const appRouter = router({
   system: systemRouter,
@@ -49,11 +83,11 @@ export const appRouter = router({
           percentages: result.percentages,
         });
 
-        // Notify owner of new submission
-        await notifyOwner({
+        // Notify owner of new submission (non-blocking)
+        notifyOwner({
           title: "New Quiz Submission",
-          content: `Archetype: ${result.primaryArchetype}${result.secondaryArchetype ? ` / ${result.secondaryArchetype}` : ""}`,
-        }).catch(() => {}); // non-blocking
+          content: `Archetype: ${result.primaryArchetype}${result.secondaryArchetype ? ` / ${result.secondaryArchetype}` : ""} | ID: ${submissionId}`,
+        }).catch(() => {});
 
         return {
           submissionId,
@@ -84,7 +118,7 @@ export const appRouter = router({
 
   email: router({
     /**
-     * Capture email → send playbook email → return success
+     * Capture email → build shareable link → send Gmail → log to Sheets
      */
     capture: publicProcedure
       .input(
@@ -93,9 +127,22 @@ export const appRouter = router({
           email: z.string().email(),
           firstName: z.string().optional(),
           archetypeId: z.string(),
+          secondaryArchetypeId: z.string().optional(),
         }),
       )
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
+        const archetype = ARCHETYPES[input.archetypeId as keyof typeof ARCHETYPES];
+        if (!archetype) throw new Error("Invalid archetype");
+
+        // Build the shareable playbook link
+        const playbookLink = buildPlaybookLink(
+          ctx.req,
+          input.submissionId,
+          input.archetypeId,
+          input.secondaryArchetypeId,
+        );
+
+        // Save capture to DB
         const captureId = await saveEmailCapture({
           submissionId: input.submissionId,
           email: input.email,
@@ -104,39 +151,57 @@ export const appRouter = router({
           emailSent: "pending",
         });
 
-        const archetype = ARCHETYPES[input.archetypeId as keyof typeof ARCHETYPES];
-        if (!archetype) throw new Error("Invalid archetype");
+        // Build email content
+        const { subject, text } = buildPlaybookEmail(
+          archetype,
+          input.firstName ?? null,
+          playbookLink,
+        );
 
-        const emailContent = buildPlaybookEmail(archetype, input.firstName ?? null);
+        // ── 1. Send Gmail ────────────────────────────────────────────
+        const emailResult = await sendGmailEmail({
+          to: input.email,
+          subject,
+          content: text,
+        });
 
-        // Send via LLM-backed email API (Manus built-in)
-        try {
-          await invokeLLM({
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are an email delivery assistant. The user wants to send an email. Confirm the email details are correct and respond with OK.",
-              },
-              {
-                role: "user",
-                content: `Send email to ${input.email} with subject: "${emailContent.subject}"`,
-              },
-            ],
-          });
-          // Use the notification system to send the actual email content
-          await notifyOwner({
-            title: `Playbook Email: ${input.email}`,
-            content: `Archetype: ${archetype.name}\nEmail: ${input.email}\nFirst name: ${input.firstName ?? "not provided"}`,
-          }).catch(() => {});
-
+        if (emailResult.success) {
           await updateEmailStatus(captureId, "sent");
-        } catch (err) {
+          console.log(`[Email] Sent playbook to ${input.email}`);
+        } else {
           await updateEmailStatus(captureId, "failed");
-          console.error("[Email] Failed to send playbook email:", err);
+          console.error(`[Email] Failed for ${input.email}:`, emailResult.error);
         }
 
-        return { success: true, captureId };
+        // ── 2. Log to Google Sheets ──────────────────────────────────
+        const sheetsResult = await logLeadToSheets({
+          firstName: input.firstName ?? null,
+          email: input.email,
+          primaryArchetype: input.archetypeId,
+          secondaryArchetype: input.secondaryArchetypeId ?? null,
+          submissionId: input.submissionId,
+          playbookLink,
+        });
+
+        if (sheetsResult.success) {
+          console.log(`[Sheets] Logged lead: ${input.email}`);
+        } else {
+          console.error(`[Sheets] Log failed:`, sheetsResult.error);
+        }
+
+        // ── 3. Notify owner ──────────────────────────────────────────
+        notifyOwner({
+          title: `New Lead: ${input.firstName ?? input.email}`,
+          content: `Email: ${input.email}\nArchetype: ${archetype.name}\nPlaybook: ${playbookLink}\nEmail sent: ${emailResult.success ? "✓" : "✗"} | Sheets: ${sheetsResult.success ? "✓" : "✗"}`,
+        }).catch(() => {});
+
+        return {
+          success: true,
+          captureId,
+          playbookLink,
+          emailSent: emailResult.success,
+          sheetsLogged: sheetsResult.success,
+        };
       }),
   }),
 });
