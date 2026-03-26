@@ -186,84 +186,75 @@ function EmailGate({
   }
 
   // ── Default: form ──
+  const archetypeName = archetypeId.charAt(0).toUpperCase() + archetypeId.slice(1);
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 space-y-5">
-      <div className="text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 border border-primary/30 mb-4">
-          <Lock size={20} className="text-primary" />
-        </div>
-        <h3 className="text-xl font-black mb-2">Unlock Your Full Playbook</h3>
+    <div className="rounded-2xl border-2 border-primary/30 bg-card p-6 sm:p-8 space-y-5 relative overflow-hidden">
+      {/* Subtle glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, oklch(0.65 0.18 42 / 0.06) 0%, transparent 70%)" }}
+      />
+
+      <div className="text-center relative z-10">
+        <h3 className="text-2xl font-black mb-2">Your Playbook Is Ready</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Your full {archetypeId.charAt(0).toUpperCase() + archetypeId.slice(1)} playbook is ready — positioning, content strategy, pricing, and your #1 action this week. Drop your details and we'll show it on screen and send a permanent link to your inbox.
+          Drop your email and it unlocks on screen instantly — plus we'll send a permanent link to your inbox so you can come back to it anytime.
         </p>
       </div>
 
-      {/* Blurred preview strip */}
-      <div className="rounded-xl overflow-hidden border border-border relative h-20">
-        <div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{
-            background: "linear-gradient(to bottom, oklch(0.12 0.005 260 / 0.3) 0%, oklch(0.09 0.005 260 / 0.95) 100%)",
-          }}
-        />
-        <div className="blur-sm pointer-events-none select-none p-4 space-y-2">
-          {["Positioning", "Content Strategy", "Client Targeting", "Pricing", "Brand Identity", "Growth Strategy"].map((label) => (
-            <div key={label} className="flex items-center gap-3">
-              <div className="h-2.5 w-2.5 rounded-full bg-primary/30 flex-shrink-0" />
-              <div className="h-2.5 bg-secondary/60 rounded flex-1" />
-            </div>
-          ))}
-        </div>
-        <div className="absolute inset-0 z-20 flex items-center justify-center">
-          <span className="text-xs font-bold tracking-widest uppercase text-muted-foreground/70">6 Sections Inside</span>
-        </div>
-      </div>
-
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-3 relative z-10">
         <input
           type="text"
-          placeholder="First name (optional)"
+          placeholder="First name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           autoComplete="given-name"
-          className="w-full px-4 py-3.5 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+          className="w-full px-4 py-4 bg-secondary border border-border rounded-xl text-base placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
         />
         <input
           type="email"
-          placeholder="Your email address *"
+          placeholder="Your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
           inputMode="email"
-          className="w-full px-4 py-3.5 bg-secondary border border-border rounded-xl text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+          className="w-full px-4 py-4 bg-secondary border border-border rounded-xl text-base placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
         />
         <button
           type="submit"
           disabled={!email || captureMutation.isPending}
-          className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-bold py-4 rounded-xl text-base hover:bg-primary/90 active:scale-[0.98] transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-black py-5 rounded-xl text-lg hover:bg-primary/90 active:scale-[0.98] transition-all shadow-xl shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {captureMutation.isPending ? (
             <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
-              Sending...
+              <span className="w-5 h-5 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
+              Unlocking...
             </span>
           ) : (
             <>
-              <Mail size={18} />
-              Get My Full Playbook
-              <ArrowRight size={18} />
+              <Unlock size={20} />
+              Show Me My Playbook
+              <ArrowRight size={20} />
             </>
           )}
         </button>
       </form>
 
+      <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60 relative z-10">
+        <span>Free forever</span>
+        <span>·</span>
+        <span>No spam</span>
+        <span>·</span>
+        <span>Unsubscribe anytime</span>
+      </div>
+
       <button
         onClick={() => onUnlock(false)}
-        className="w-full text-center text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors py-1"
+        className="w-full text-center text-xs text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors py-1 relative z-10"
       >
-        Skip — just show me the playbook
+        Skip for now
       </button>
     </div>
   );
@@ -425,11 +416,24 @@ export default function Results() {
         {/* ── EMAIL GATE ──────────────────────────────────────────── */}
         {!playbookUnlocked && (
           <div className="animate-fade-in-up opacity-0 delay-300">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-black mb-2">Your Brand Playbook</h2>
-              <p className="text-muted-foreground text-sm">
-                Everything you need to position, market, and grow your business as {archetype.name}.
-              </p>
+            {/* Value bridge — show what's coming before the gate */}
+            <div className="bg-card border border-border rounded-xl p-5 mb-4">
+              <p className="text-xs font-black tracking-widest uppercase text-primary mb-3">What's in your {archetype.name} Playbook</p>
+              <div className="space-y-2">
+                {[
+                  `Your exact positioning statement as ${archetype.name}`,
+                  "What to post, what to avoid, and your filming style",
+                  "Who your ideal client is — and who to walk away from",
+                  "Your pricing tier and how to own it",
+                  "Visual and language direction for your brand",
+                  "Your #1 growth blocker and the specific move to fix it",
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-sm">
+                    <span className="text-primary font-bold text-xs w-5 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-muted-foreground">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             <EmailGate
               submissionId={submissionId}

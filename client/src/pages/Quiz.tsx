@@ -24,7 +24,7 @@ export default function Quiz() {
   });
 
   const currentQuestion = QUIZ_QUESTIONS[currentIndex];
-  const progress = ((currentIndex) / TOTAL_QUESTIONS) * 100;
+  const progress = ((currentIndex + 1) / TOTAL_QUESTIONS) * 100;
   const answeredCount = Object.keys(answers).length;
   const isLastQuestion = currentIndex === TOTAL_QUESTIONS - 1;
   const currentAnswer = answers[currentQuestion.id];
@@ -60,12 +60,14 @@ export default function Quiz() {
     setAnswers((prev) => ({ ...prev, [currentQuestion.id]: optionId }));
   };
 
-  // Auto-advance on selection for multiple choice
+  // Auto-advance on selection (both multiple choice and likert for speed)
   useEffect(() => {
     if (currentAnswer && currentQuestion.type === "multiple_choice") {
-      const timer = setTimeout(() => {
-        goNext();
-      }, 350);
+      const timer = setTimeout(() => goNext(), 320);
+      return () => clearTimeout(timer);
+    }
+    if (currentAnswer && currentQuestion.type === "likert") {
+      const timer = setTimeout(() => goNext(), 500);
       return () => clearTimeout(timer);
     }
   }, [currentAnswer, currentQuestion.type, goNext]);
@@ -83,10 +85,15 @@ export default function Quiz() {
               <ArrowLeft size={16} />
               {currentIndex === 0 ? "Back" : "Previous"}
             </button>
-            <span className="text-sm font-semibold text-muted-foreground">
-              {currentIndex + 1}{" "}
-              <span className="text-muted-foreground/50">/ {TOTAL_QUESTIONS}</span>
-            </span>
+            <div className="flex flex-col items-end">
+              <span className="text-sm font-bold text-foreground">
+                {currentIndex + 1}
+                <span className="text-muted-foreground/50 font-normal"> / {TOTAL_QUESTIONS}</span>
+              </span>
+              <span className="text-[10px] text-muted-foreground/50 mt-0.5">
+                {Math.round(progress)}% done
+              </span>
+            </div>
           </div>
           {/* Progress bar */}
           <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
@@ -153,8 +160,8 @@ export default function Quiz() {
             <div>
               {/* Scale labels */}
               <div className="flex justify-between text-xs text-muted-foreground mb-4 px-1">
-                <span>Strongly disagree</span>
-                <span>Strongly agree</span>
+                <span>Not me at all</span>
+                <span>100% me</span>
               </div>
               {/* Scale buttons */}
               <div className="flex gap-2 sm:gap-3 justify-between">
@@ -166,56 +173,35 @@ export default function Quiz() {
                       key={option.id}
                       onClick={() => selectAnswer(option.id)}
                       title={label}
-                      className={`flex-1 aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all duration-150 hover:border-primary/50 ${
+                      className={`flex-1 aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all duration-150 hover:border-primary/50 active:scale-95 ${
                         isSelected
-                          ? "border-primary bg-primary/10 text-primary"
+                          ? "border-primary bg-primary/10 text-primary scale-105"
                           : "border-border bg-card text-muted-foreground"
                       }`}
                     >
                       <span className="text-lg sm:text-xl font-black">
                         {idx + 1}
                       </span>
-                      <span className="text-[9px] sm:text-[10px] font-medium hidden sm:block text-center leading-tight px-1">
-                        {label.split(" ")[0]}
-                      </span>
                     </button>
                   );
                 })}
               </div>
-              {/* Selected label */}
-              {currentAnswer && (
-                <div className="mt-4 text-center text-sm text-primary font-medium">
-                  {
-                    LIKERT_LABELS[
-                      currentQuestion.options.findIndex(
-                        (o) => o.id === currentAnswer,
-                      )
-                    ]
-                  }
-                </div>
-              )}
-              {/* Next button for Likert */}
-              {currentAnswer && (
-                <button
-                  onClick={goNext}
-                  disabled={submitMutation.isPending}
-                  className="mt-6 w-full flex items-center justify-center gap-3 bg-primary text-primary-foreground font-bold py-4 rounded-xl hover:bg-primary/90 transition-all duration-200 disabled:opacity-50"
-                >
-                  {submitMutation.isPending ? (
-                    "Calculating your archetype..."
-                  ) : isLastQuestion ? (
-                    <>
-                      <CheckCircle2 size={18} />
-                      See My Results
-                    </>
-                  ) : (
-                    <>
-                      Next Question
-                      <ArrowRight size={18} />
-                    </>
-                  )}
-                </button>
-              )}
+              {/* Selected label feedback */}
+              <div className="mt-4 h-6 text-center">
+                {currentAnswer ? (
+                  <span className="text-sm text-primary font-semibold animate-fade-in">
+                    {
+                      LIKERT_LABELS[
+                        currentQuestion.options.findIndex(
+                          (o) => o.id === currentAnswer,
+                        )
+                      ]
+                    }
+                  </span>
+                ) : (
+                  <span className="text-xs text-muted-foreground/50">Tap a number to answer</span>
+                )}
+              </div>
             </div>
           )}
         </div>

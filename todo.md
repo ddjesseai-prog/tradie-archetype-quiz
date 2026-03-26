@@ -117,3 +117,16 @@
 - [ ] Add /admin route to App.tsx
 - [ ] Write tests for admin procedures
 - [ ] Save checkpoint
+
+## Phase 11: High-Converting Funnel Redesign
+
+- [ ] Audit landing page, quiz, and results for conversion friction
+- [ ] Landing page: stronger above-the-fold hook, social proof, urgency
+- [ ] Landing page: reduce scroll before CTA, add secondary CTA
+- [ ] Quiz: reduce perceived length, add momentum micro-copy
+- [ ] Quiz: auto-advance on multiple choice, smoother Likert UX
+- [ ] Results: lead with the most emotionally resonant content first
+- [ ] Email gate: reframe value proposition, reduce fields, add urgency
+- [ ] Email gate: add social proof near the submit button
+- [ ] Post-capture: stronger confirmation state with clear next step
+- [ ] Test all flows, save checkpoint
