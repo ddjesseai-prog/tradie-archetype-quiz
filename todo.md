@@ -130,3 +130,11 @@
 - [ ] Email gate: add social proof near the submit button
 - [ ] Post-capture: stronger confirmation state with clear next step
 - [ ] Test all flows, save checkpoint
+
+## Phase 12: Brand Guidelines & TQ Logo
+- [ ] Extract full design system from index.css (colours, typography, spacing)
+- [ ] Generate TQ logo — primary, dark bg, light bg, and icon-only variations
+- [ ] Build live /brand-guidelines page on the site
+- [ ] Produce downloadable brand guidelines PDF
+- [ ] Upload all logo assets to CDN
+- [ ] Save checkpoint

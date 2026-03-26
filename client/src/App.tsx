@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
 import Admin from "./pages/Admin";
+import BrandGuidelines from "./pages/BrandGuidelines";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/results" component={Results} />
       <Route path="/404" component={NotFound} />
       <Route path="/admin" component={Admin} />
+      <Route path="/brand-guidelines" component={BrandGuidelines} />
       <Route component={NotFound} />
     </Switch>
   );
