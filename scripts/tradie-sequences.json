@@ -1,0 +1,92 @@
+{
+  "sequences": {
+    "post_quiz_capture": {
+      "name": "Post-Quiz Follow-Up",
+      "description": "Follow-up sequence after user submits email for playbook",
+      "trigger": "email_captured",
+      "stages": [
+        {
+          "id": "welcome_email",
+          "name": "Welcome Email",
+          "type": "email",
+          "delay_hours": 0,
+          "template": "welcome_email",
+          "next_stage": "day_1_followup"
+        },
+        {
+          "id": "day_1_followup",
+          "name": "Day 1 Follow-Up",
+          "type": "email",
+          "delay_hours": 24,
+          "template": "day_1_followup",
+          "next_stage": "day_3_value"
+        },
+        {
+          "id": "day_3_value",
+          "name": "Day 3 Value",
+          "type": "email",
+          "delay_hours": 72,
+          "template": "day_3_value",
+          "next_stage": "day_7_soft_close"
+        },
+        {
+          "id": "day_7_soft_close",
+          "name": "Day 7 Soft Close",
+          "type": "email",
+          "delay_hours": 168,
+          "template": "day_7_soft_close",
+          "next_stage": null
+        }
+      ]
+    },
+    "no_response": {
+      "name": "No Response Re-engagement",
+      "description": "Re-engage leads who haven't responded",
+      "trigger": "no_response_3_days",
+      "stages": [
+        {
+          "id": "reengage_1",
+          "name": "Re-Engage First",
+          "type": "email",
+          "delay_hours": 0,
+          "template": "reengage_1",
+          "next_stage": "reengage_2"
+        },
+        {
+          "id": "reengage_2",
+          "name": "Re-Engage Second",
+          "type": "email",
+          "delay_hours": 72,
+          "template": "reengage_2",
+          "next_stage": null
+        }
+      ]
+    }
+  },
+  "templates": {
+    "welcome_email": {
+      "subject": "Your Brand Archetype Results 🎯",
+      "variables": ["firstName", "archetypeName", "playbookLink"]
+    },
+    "day_1_followup": {
+      "subject": "Quick question about your archetype",
+      "variables": ["firstName", "archetypeName"]
+    },
+    "day_3_value": {
+      "subject": "3 things every tradie brand gets wrong",
+      "variables": ["firstName", "archetypeName"]
+    },
+    "day_7_soft_close": {
+      "subject": "Last chance to unlock your full playbook",
+      "variables": ["firstName", "archetypeName", "playbookLink"]
+    },
+    "reengage_1": {
+      "subject": "Did you see your archetype?",
+      "variables": ["firstName", "archetypeName"]
+    },
+    "reengage_2": {
+      "subject": "One more thing...",
+      "variables": ["firstName"]
+    }
+  }
+}

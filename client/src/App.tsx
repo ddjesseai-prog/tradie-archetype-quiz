@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
+import TradieLeads from "./pages/TradieLeads";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/results" component={Results} />
       <Route path="/404" component={NotFound} />
       <Route path="/admin" component={Admin} />
+      <Route path="/tradie-leads" component={TradieLeads} />
       <Route path="/brand-guidelines" component={BrandGuidelines} />
       <Route component={NotFound} />
     </Switch>

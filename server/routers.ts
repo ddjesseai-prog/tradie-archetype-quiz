@@ -10,6 +10,7 @@ import {
   getAdminStats,
   getAllLeads,
   getQuizSubmissionById,
+  getQuizSubmissionAnswers,
   saveEmailCapture,
   saveQuizSubmission,
   updateEmailStatus,
@@ -17,6 +18,7 @@ import {
 import { buildPlaybookEmail } from "./emailTemplate";
 import { sendEmail } from "./emailSender";
 import { logLeadToSheets } from "./sheetsLogger";
+import { buildAndLogCRMLead } from "./crmLogger";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -191,10 +193,29 @@ export const appRouter = router({
           console.error(`[Sheets] Log failed:`, sheetsResult.error);
         }
 
-        // ── 3. Notify owner ──────────────────────────────────────────
+        // ── 3. Log to CRM (JSONL) ──────────────────────────────────
+        const submissionData = await getQuizSubmissionAnswers(input.submissionId);
+        const crmResult = await buildAndLogCRMLead({
+          firstName: input.firstName ?? null,
+          email: input.email,
+          archetypeId: input.archetypeId,
+          secondaryArchetypeId: input.secondaryArchetypeId ?? null,
+          submissionId: input.submissionId,
+          quizAnswers: submissionData?.answers as Record<string, string> ?? {},
+          scores: submissionData?.scores as Record<string, number> ?? {},
+          percentages: submissionData?.percentages as Record<string, number> ?? {},
+        });
+
+        if (crmResult.success) {
+          console.log(`[CRM] Logged lead: ${input.email}`);
+        } else {
+          console.error(`[CRM] Log failed:`, crmResult.error);
+        }
+
+        // ── 4. Notify owner ──────────────────────────────────────────
         notifyOwner({
           title: `New Lead: ${input.firstName ?? input.email}`,
-          content: `Email: ${input.email}\nArchetype: ${archetype.name}\nPlaybook: ${playbookLink}\nEmail sent: ${emailResult.success ? "✓" : "✗"} | Sheets: ${sheetsResult.success ? "✓" : "✗"}`,
+          content: `Email: ${input.email}\nArchetype: ${archetype.name}\nPlaybook: ${playbookLink}\nEmail sent: ${emailResult.success ? "✓" : "✗"} | Sheets: ${sheetsResult.success ? "✓" : "✗"} | CRM: ${crmResult.success ? "✓" : "✗"}`,
         }).catch(() => {});
 
         return {
@@ -203,6 +224,7 @@ export const appRouter = router({
           playbookLink,
           emailSent: emailResult.success,
           sheetsLogged: sheetsResult.success,
+          crmLogged: crmResult.success,
         };
       }),
   }),

@@ -85,6 +85,13 @@ export async function getQuizSubmissionById(id: number) {
   return result[0] ?? undefined;
 }
 
+export async function getQuizSubmissionAnswers(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select({ answers: quizSubmissions.answers, scores: quizSubmissions.scores, percentages: quizSubmissions.percentages }).from(quizSubmissions).where(eq(quizSubmissions.id, id)).limit(1);
+  return result[0] ?? undefined;
+}
+
 // ─── EMAIL CAPTURE HELPERS ────────────────────────────────────────────────────
 
 export async function saveEmailCapture(data: InsertEmailCapture) {

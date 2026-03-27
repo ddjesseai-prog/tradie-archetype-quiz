@@ -7,6 +7,7 @@ import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { initTradieDb, getLeadsForCRM } from "../../scripts/tradie-db.js";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -43,6 +44,18 @@ async function startServer() {
       createContext,
     })
   );
+
+  // Tradie Leads CRM API (read-only)
+  app.get("/api/tradie-leads", async (req, res) => {
+    try {
+      await initTradieDb();
+      const leads = getLeadsForCRM();
+      res.json({ leads });
+    } catch (error) {
+      console.error("[tradie-leads] Error:", error);
+      res.status(500).json({ error: "Failed to fetch leads" });
+    }
+  });
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
