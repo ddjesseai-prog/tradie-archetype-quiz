@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { QUIZ_QUESTIONS, TOTAL_QUESTIONS, LIKERT_LABELS } from "../../../shared/quiz";
+import { QUIZ_QUESTIONS, TOTAL_QUESTIONS } from "../../../shared/quiz";
 import { trpc } from "@/lib/trpc";
 import { nanoid } from "nanoid";
 
@@ -60,14 +60,10 @@ export default function Quiz() {
     setAnswers((prev) => ({ ...prev, [currentQuestion.id]: optionId }));
   };
 
-  // Auto-advance on selection (both multiple choice and likert for speed)
+  // Auto-advance on selection
   useEffect(() => {
     if (currentAnswer && currentQuestion.type === "multiple_choice") {
       const timer = setTimeout(() => goNext(), 320);
-      return () => clearTimeout(timer);
-    }
-    if (currentAnswer && currentQuestion.type === "likert") {
-      const timer = setTimeout(() => goNext(), 500);
       return () => clearTimeout(timer);
     }
   }, [currentAnswer, currentQuestion.type, goNext]);
@@ -155,55 +151,6 @@ export default function Quiz() {
             </div>
           )}
 
-          {/* ── LIKERT SCALE ─────────────────────────────────────── */}
-          {currentQuestion.type === "likert" && (
-            <div>
-              {/* Scale labels */}
-              <div className="flex justify-between text-xs text-muted-foreground mb-4 px-1">
-                <span>Not me at all</span>
-                <span>100% me</span>
-              </div>
-              {/* Scale buttons */}
-              <div className="flex gap-2 sm:gap-3 justify-between">
-                {currentQuestion.options.map((option, idx) => {
-                  const isSelected = currentAnswer === option.id;
-                  const label = LIKERT_LABELS[idx];
-                  return (
-                    <button
-                      key={option.id}
-                      onClick={() => selectAnswer(option.id)}
-                      title={label}
-                      className={`flex-1 aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-1 transition-all duration-150 hover:border-primary/50 active:scale-95 ${
-                        isSelected
-                          ? "border-primary bg-primary/10 text-primary scale-105"
-                          : "border-border bg-card text-muted-foreground"
-                      }`}
-                    >
-                      <span className="text-lg sm:text-xl font-black">
-                        {idx + 1}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              {/* Selected label feedback */}
-              <div className="mt-4 h-6 text-center">
-                {currentAnswer ? (
-                  <span className="text-sm text-primary font-semibold animate-fade-in">
-                    {
-                      LIKERT_LABELS[
-                        currentQuestion.options.findIndex(
-                          (o) => o.id === currentAnswer,
-                        )
-                      ]
-                    }
-                  </span>
-                ) : (
-                  <span className="text-xs text-muted-foreground/50">Tap a number to answer</span>
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ── BOTTOM HINT ──────────────────────────────────────────── */}

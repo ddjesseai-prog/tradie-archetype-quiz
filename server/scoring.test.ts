@@ -26,21 +26,18 @@ describe("calculateScores", () => {
   });
 
   it("accumulates weights correctly for operator-aligned answers", () => {
-    // q9b → operator: 3, hustler: 1
-    // q16b → operator: 3, hustler: 1
-    const answers = { q9: "q9b", q16: "q16b" };
+    // q6a → operator: 3, specialist: 1
+    // q12a → operator: 3, specialist: 1
+    const answers = { q6: "q6a", q12: "q12a" };
     const result = calculateScores(answers);
     expect(result.scores.operator).toBe(6);
-    expect(result.scores.hustler).toBe(2);
+    expect(result.scores.specialist).toBe(2);
     expect(result.primaryArchetype).toBe("operator");
   });
 
   it("accumulates weights correctly for hustler-aligned answers", () => {
-    // q1b → hustler: 2, operator: 3
-    // Need a pure hustler answer: q9 has no pure hustler
-    // Use q2c → hustler: 3, guardian: 1 and q1b → operator: 3, hustler: 2
-    // Let's find a question where hustler=3 is the top weight
-    const answers = { q2: "q2c" }; // hustler: 3, guardian: 1
+    // q2c → hustler: 3, guardian: 1
+    const answers = { q2: "q2c" };
     const result = calculateScores(answers);
     expect(result.scores.hustler).toBe(3);
     expect(result.primaryArchetype).toBe("hustler");
@@ -126,7 +123,7 @@ describe("quiz questions structure", () => {
     });
   });
 
-  it("total question count is 25", () => {
-    expect(QUIZ_QUESTIONS.length).toBe(25);
+  it("total question count is 17", () => {
+    expect(QUIZ_QUESTIONS.length).toBe(17);
   });
 });
