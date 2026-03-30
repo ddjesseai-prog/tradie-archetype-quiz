@@ -10,6 +10,7 @@ import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
 import Admin from "./pages/Admin";
 import BrandGuidelines from "./pages/BrandGuidelines";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/admin" component={Admin} />
       <Route path="/tradie-leads" component={TradieLeads} />
       <Route path="/brand-guidelines" component={BrandGuidelines} />
+      <Route path="/payment-success" component={PaymentSuccess} />
       <Route component={NotFound} />
     </Switch>
   );

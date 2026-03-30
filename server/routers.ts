@@ -19,6 +19,9 @@ import { buildPlaybookEmail } from "./emailTemplate";
 import { sendEmail } from "./emailSender";
 import { logLeadToSheets } from "./sheetsLogger";
 import { buildAndLogCRMLead } from "./crmLogger";
+import { createBrandAuditCheckoutSession } from "./stripe";
+import { ENV } from "./_core/env";
+import Stripe from "stripe";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -226,6 +229,39 @@ export const appRouter = router({
           sheetsLogged: sheetsResult.success,
           crmLogged: crmResult.success,
         };
+      }),
+  }),
+
+  payment: router({
+    /**
+     * Create a Stripe Checkout session for the $990 Brand Audit package
+     */
+    createCheckout: publicProcedure
+      .input(
+        z.object({
+          submissionId: z.number(),
+          archetypeId: z.string(),
+          customerEmail: z.string().email().optional(),
+          origin: z.string().url(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        const archetype = ARCHETYPES[input.archetypeId as keyof typeof ARCHETYPES];
+        if (!archetype) throw new Error("Invalid archetype");
+
+        const successUrl = `${input.origin}/payment-success?submissionId=${input.submissionId}&archetype=${input.archetypeId}&session_id={CHECKOUT_SESSION_ID}`;
+        const cancelUrl = `${input.origin}/results?submissionId=${input.submissionId}&archetype=${input.archetypeId}&unlocked=1`;
+
+        const { url, sessionId } = await createBrandAuditCheckoutSession({
+          archetypeId: input.archetypeId,
+          archetypeName: archetype.name,
+          submissionId: input.submissionId,
+          successUrl,
+          cancelUrl,
+          customerEmail: input.customerEmail,
+        });
+
+        return { checkoutUrl: url, sessionId };
       }),
   }),
 

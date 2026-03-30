@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { useLocation, useSearch } from "wouter";
 import {
   ArrowRight,
@@ -22,6 +22,107 @@ import {
 import { ARCHETYPES } from "../../../shared/archetypes";
 import type { ArchetypeId, Archetype } from "../../../shared/archetypes";
 import { trpc } from "@/lib/trpc";
+
+// ─── BRAND AUDIT OFFER ───────────────────────────────────────────────────────
+
+function BrandAuditOffer({
+  archetypeId,
+  archetypeName,
+  submissionId,
+  customerEmail,
+}: {
+  archetypeId: string;
+  archetypeName: string;
+  submissionId: number;
+  customerEmail?: string;
+}) {
+  const checkoutMutation = trpc.payment.createCheckout.useMutation({
+    onSuccess: (data) => {
+      window.open(data.checkoutUrl, "_blank");
+    },
+    onError: () => {
+      alert("Something went wrong. Please try again.");
+    },
+  });
+
+  const handleBuy = () => {
+    checkoutMutation.mutate({
+      submissionId,
+      archetypeId,
+      customerEmail,
+      origin: window.location.origin,
+    });
+  };
+
+  return (
+    <div className="relative rounded-2xl overflow-hidden border-2 border-primary/50 bg-card">
+      {/* Glow background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, oklch(0.65 0.18 42 / 0.12) 0%, transparent 70%)" }}
+      />
+      <div className="relative z-10 p-6 sm:p-8 space-y-6">
+        {/* Header */}
+        <div className="text-center">
+          <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-primary border border-primary/30 bg-primary/10 px-4 py-1.5 rounded-full mb-4">
+            Take It Further
+          </span>
+          <h3 className="text-2xl sm:text-3xl font-black mb-2">
+            {archetypeName} Brand Audit
+          </h3>
+          <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mx-auto">
+            A 60-minute deep-dive with Jesse Hunter. We audit your current brand, identify the exact gaps costing you jobs, and build your positioning strategy from the ground up.
+          </p>
+        </div>
+
+        {/* What's included */}
+        <div className="space-y-2.5">
+          {[
+            "Full brand audit against your archetype profile",
+            "Positioning statement written in your voice",
+            "Competitor gap analysis for your trade and market",
+            "Content strategy and platform priorities",
+            "60-min 1:1 strategy session via Zoom",
+            "Written action plan delivered within 24 hours",
+          ].map((item) => (
+            <div key={item} className="flex items-start gap-3 text-sm">
+              <span className="text-primary font-bold mt-0.5 flex-shrink-0">✓</span>
+              <span className="text-muted-foreground">{item}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Price + CTA */}
+        <div className="text-center space-y-3">
+          <div className="flex items-baseline justify-center gap-2">
+            <span className="text-4xl font-black text-foreground">$990</span>
+            <span className="text-muted-foreground text-sm">AUD</span>
+          </div>
+          <button
+            onClick={handleBuy}
+            disabled={checkoutMutation.isPending}
+            className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-black py-5 rounded-xl text-lg hover:bg-primary/90 active:scale-[0.98] transition-all shadow-xl shadow-primary/25 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {checkoutMutation.isPending ? (
+              <span className="flex items-center gap-2">
+                <span className="w-5 h-5 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
+                Redirecting to checkout...
+              </span>
+            ) : (
+              <>
+                Book My Brand Audit
+                <ArrowRight size={20} />
+              </>
+            )}
+          </button>
+          <p className="text-xs text-muted-foreground/60">
+            Secure checkout via Stripe. One-time payment. No subscription.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── PLAYBOOK SECTION ────────────────────────────────────────────────────────
 
@@ -643,6 +744,18 @@ export default function Results() {
               <p className="text-sm leading-relaxed text-muted-foreground">{archetype.tension}</p>
             </div>
 
+          </div>
+        )}
+
+        {/* ── BRAND AUDIT OFFER ────────────────────────────────────── */}
+        {playbookUnlocked && primaryId && (
+          <div className="animate-fade-in-up opacity-0">
+            <BrandAuditOffer
+              archetypeId={primaryId}
+              archetypeName={archetype.name}
+              submissionId={submissionId}
+              customerEmail={undefined}
+            />
           </div>
         )}
 

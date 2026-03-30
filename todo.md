@@ -138,3 +138,14 @@
 - [ ] Produce downloadable brand guidelines PDF
 - [ ] Upload all logo assets to CDN
 - [ ] Save checkpoint
+
+## Phase 13: Stripe Payment + Home Page Alignment
+
+- [x] Set up Stripe integration via webdev_add_feature
+- [x] Add STRIPE_SECRET_KEY and VITE_STRIPE_PUBLISHABLE_KEY secrets
+- [x] Add Stripe checkout tRPC procedure (createCheckoutSession at $990)
+- [x] Add Calendly redirect handler on payment success (/payment-success route)
+- [x] Add offer section to Results page with $990 CTA and Stripe button
+- [x] Update Home page copy: headline, archetype names, and feature list to reflect 5-archetype system
+- [ ] Write vitest tests for Stripe checkout procedure (pending Calendly URL)
+- [ ] Save checkpoint

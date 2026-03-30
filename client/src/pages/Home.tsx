@@ -2,13 +2,11 @@ import { useLocation } from "wouter";
 import { ArrowRight, Zap, CheckCircle, Star } from "lucide-react";
 
 const ARCHETYPE_PREVIEWS = [
-  { emoji: "🔨", name: "The Craftsman", hint: "Quality over everything" },
-  { emoji: "⚙️", name: "The Operator", hint: "Systems & scale" },
-  { emoji: "⚡", name: "The Hustler", hint: "Fast & hungry" },
-  { emoji: "🎯", name: "The Specialist", hint: "Niche mastery" },
-  { emoji: "🦁", name: "The Leader", hint: "Building a legacy" },
-  { emoji: "🛡️", name: "The Guardian", hint: "Trusted for life" },
-  { emoji: "🔥", name: "The Maverick", hint: "Different by design" },
+  { emoji: "🔨", name: "Precision Craftsman", hint: "Quality is the brand" },
+  { emoji: "⚙️", name: "Systems Operator", hint: "Built to scale" },
+  { emoji: "🎯", name: "High-Ticket Specialist", hint: "Premium, not volume" },
+  { emoji: "📦", name: "Volume Contractor", hint: "Reliability at scale" },
+  { emoji: "🤝", name: "Reputation Builder", hint: "Trust as the moat" },
 ];
 
 const PLAYBOOK_ITEMS = [
@@ -91,7 +89,7 @@ export default function Home() {
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle size={12} className="text-primary" />
-              Takes under 5 minutes
+              Takes 90 seconds
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle size={12} className="text-primary" />
