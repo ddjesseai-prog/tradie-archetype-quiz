@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef } from "react";
 import { useLocation, useSearch } from "wouter";
 import {
   ArrowRight,
@@ -65,13 +65,13 @@ function BrandAuditOffer({
         {/* Header */}
         <div className="text-center">
           <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-primary border border-primary/30 bg-primary/10 px-4 py-1.5 rounded-full mb-4">
-            Take It Further
+            Want the full build?
           </span>
           <h3 className="text-2xl sm:text-3xl font-black mb-2">
             {archetypeName} Brand Audit
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mx-auto">
-            A 60-minute deep-dive with Jesse Hunter. We audit your current brand, identify the exact gaps costing you jobs, and build your positioning strategy from the ground up.
+            60 minutes with Jesse Hunter. We go through your current brand, find exactly what's costing you jobs, and build your positioning strategy from scratch.
           </p>
         </div>
 
@@ -82,7 +82,7 @@ function BrandAuditOffer({
             "Positioning statement written in your voice",
             "Competitor gap analysis for your trade and market",
             "Content strategy and platform priorities",
-            "60-min 1:1 strategy session via Zoom",
+            "60-min 1:1 session via Zoom",
             "Written action plan delivered within 24 hours",
           ].map((item) => (
             <div key={item} className="flex items-start gap-3 text-sm">
@@ -264,11 +264,11 @@ function EmailGate({
           <CheckCircle2 size={26} className="text-primary" />
         </div>
         <div>
-          <h3 className="text-xl font-black mb-1">You're in.</h3>
+          <h3 className="text-xl font-black mb-1">Done. You're in.</h3>
           <p className="text-sm text-muted-foreground">
             Your playbook is on its way to{" "}
             <span className="text-foreground font-medium">{email}</span>.
-            Bookmark that email — it's your permanent link.
+            Bookmark that email. It's your permanent link.
           </p>
         </div>
         <button
@@ -287,7 +287,6 @@ function EmailGate({
   }
 
   // ── Default: form ──
-  const archetypeName = archetypeId.charAt(0).toUpperCase() + archetypeId.slice(1);
   return (
     <div className="rounded-2xl border-2 border-primary/30 bg-card p-6 sm:p-8 space-y-5 relative overflow-hidden">
       {/* Subtle glow */}
@@ -299,7 +298,7 @@ function EmailGate({
       <div className="text-center relative z-10">
         <h3 className="text-2xl font-black mb-2">Your Playbook Is Ready</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Drop your email and it unlocks on screen instantly — plus we'll send a permanent link to your inbox so you can come back to it anytime.
+          Drop your email and it opens on screen right now. We'll also send a permanent link to your inbox so you can come back to it anytime.
         </p>
       </div>
 
@@ -456,11 +455,11 @@ export default function Results() {
       {/* ── BODY ──────────────────────────────────────────────────── */}
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
 
-        {/* Strengths & Weaknesses teaser */}
+        {/* Strengths & Watch Out For */}
         <div className="animate-fade-in-up opacity-0 delay-100">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="bg-card border border-border rounded-xl p-5">
-              <h3 className="text-xs font-black tracking-widest uppercase text-primary mb-4">Your Strengths</h3>
+              <h3 className="text-xs font-black tracking-widest uppercase text-primary mb-4">What You're Good At</h3>
               <ul className="space-y-2">
                 {archetype.mirrorStatements.slice(0, 3).map((s) => (
                   <li key={s} className="flex items-start gap-2 text-sm">
@@ -517,17 +516,17 @@ export default function Results() {
         {/* ── EMAIL GATE ──────────────────────────────────────────── */}
         {!playbookUnlocked && (
           <div className="animate-fade-in-up opacity-0 delay-300">
-            {/* Value bridge — show what's coming before the gate */}
+            {/* Value bridge: show what's coming before the gate */}
             <div className="bg-card border border-border rounded-xl p-5 mb-4">
               <p className="text-xs font-black tracking-widest uppercase text-primary mb-3">What's in your {archetype.name} Playbook</p>
               <div className="space-y-2">
                 {[
                   `Your exact positioning statement as ${archetype.name}`,
-                  "What to post, what to avoid, and your filming style",
-                  "Who your ideal client is — and who to walk away from",
+                  "What to post, what to avoid, and your tone of voice",
+                  "Who your ideal client is, and who to walk away from",
                   "Your pricing tier and how to own it",
                   "Visual and language direction for your brand",
-                  "Your #1 growth blocker and the specific move to fix it",
+                  "Your biggest growth blocker and the one move to fix it",
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 text-sm">
                     <span className="text-primary font-bold text-xs w-5 shrink-0">{String(i + 1).padStart(2, "0")}</span>
@@ -567,11 +566,11 @@ export default function Results() {
               <h2 className="text-2xl font-black">{archetype.name} Brand Playbook</h2>
             </div>
 
-            {/* #1 Action This Week — hero callout */}
+            {/* #1 Action This Week */}
             <div className="bg-primary/10 border-2 border-primary/40 rounded-2xl p-5 sm:p-6">
               <div className="flex items-center gap-2 mb-3">
                 <Zap size={18} className="text-primary" />
-                <span className="text-xs font-black tracking-widest uppercase text-primary">Your #1 Action This Week</span>
+                <span className="text-xs font-black tracking-widest uppercase text-primary">Do This First</span>
               </div>
               <p className="text-base sm:text-lg font-semibold leading-relaxed text-foreground">
                 {archetype.playbook.actionThisWeek}
@@ -633,7 +632,7 @@ export default function Results() {
                       <p className="text-sm text-foreground">{archetype.playbook.contentStrategy.toneOfVoice}</p>
                     </div>
                     <div className="bg-secondary/30 rounded-lg p-3">
-                      <p className="text-xs font-semibold text-muted-foreground mb-1">Action This Week</p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Do This First</p>
                       <p className="text-sm text-foreground">{archetype.playbook.actionThisWeek}</p>
                     </div>
                   </div>
@@ -654,7 +653,7 @@ export default function Results() {
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">Who to avoid</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-destructive/70 mb-2">Who to walk away from</p>
                     <ul className="space-y-1.5">
                       {archetype.playbook.clientTargeting.whoToAvoid.map((item) => (
                         <li key={item} className="flex items-start gap-2 text-sm">
@@ -673,9 +672,11 @@ export default function Results() {
                     <span className="text-xs font-bold text-primary uppercase tracking-wider">
                       {archetype.playbook.pricingStrategy.tier === "premium"
                         ? "Premium Tier"
-                        : archetype.playbook.pricingStrategy.tier === "mid"
-                          ? "Mid Tier"
-                          : "Budget Tier"}
+                        : archetype.playbook.pricingStrategy.tier === "ultra-premium"
+                          ? "Ultra-Premium Tier"
+                          : archetype.playbook.pricingStrategy.tier === "mid"
+                            ? "Mid Tier"
+                            : "Budget Tier"}
                     </span>
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">
@@ -725,7 +726,7 @@ export default function Results() {
             {/* Copy results link */}
             <CopyLinkButton />
 
-            {/* Default behaviours */}
+            {/* How you show up */}
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-4">How You Show Up</h3>
               <ul className="space-y-2">
@@ -738,9 +739,9 @@ export default function Results() {
               </ul>
             </div>
 
-            {/* Market perception */}
+            {/* Where you're leaving money */}
             <div className="bg-secondary/30 border border-border rounded-xl p-5">
-              <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-3">How the Market Sees You</h3>
+              <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-3">Where You're Leaving Money</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">{archetype.tension}</p>
             </div>
 
@@ -782,7 +783,7 @@ export default function Results() {
       {/* ── FOOTER ────────────────────────────────────────────────── */}
       <footer className="border-t border-border py-8 px-4 text-center mt-8">
         <p className="text-xs text-muted-foreground">
-          Tradie Brand Archetype Quiz — Built for Australian tradies.
+          Tradie Brand Archetype Quiz. Built for Australian tradies.
         </p>
       </footer>
 

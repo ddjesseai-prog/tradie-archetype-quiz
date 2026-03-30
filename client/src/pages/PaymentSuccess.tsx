@@ -18,7 +18,7 @@ export default function PaymentSuccess() {
   const archetype = archetypeParam ? ARCHETYPES[archetypeParam] : null;
   const [countdown, setCountdown] = useState(5);
 
-  // Auto-redirect to Calendly after 5 seconds
+  // Auto-redirect to booking after 5 seconds
   useEffect(() => {
     if (countdown <= 0) {
       window.location.href = BOOKING_URL;
@@ -47,7 +47,7 @@ export default function PaymentSuccess() {
             <span className="text-foreground font-semibold">
               {archetype ? `${archetype.name} Brand Audit` : "Brand Audit"}
             </span>{" "}
-            is booked. Now lock in your session time with Jesse.
+            is locked in. Now pick a time that works for you.
           </p>
         </div>
 
@@ -56,9 +56,9 @@ export default function PaymentSuccess() {
           <h3 className="text-xs font-black tracking-widest uppercase text-primary">What happens next</h3>
           {[
             "Pick a time that works for you on the next screen",
-            "You'll receive a confirmation email with the Zoom link",
+            "You'll get a confirmation email with the Zoom link",
             "Jesse reviews your archetype profile before the call",
-            "60-minute session — your brand strategy built live",
+            "60-minute session. Your brand strategy built live.",
             "Written action plan delivered within 24 hours",
           ].map((step, i) => (
             <div key={i} className="flex items-start gap-3 text-sm">
@@ -70,7 +70,7 @@ export default function PaymentSuccess() {
           ))}
         </div>
 
-        {/* Calendly CTA */}
+        {/* Booking CTA */}
         <div className="space-y-3">
           <a
             href={BOOKING_URL}
@@ -79,11 +79,11 @@ export default function PaymentSuccess() {
             className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-black py-5 rounded-xl text-lg hover:bg-primary/90 active:scale-[0.98] transition-all shadow-xl shadow-primary/25"
           >
             <Calendar size={20} />
-            Book My Session on Google Calendar
+            Pick My Session Time
             <ArrowRight size={20} />
           </a>
           <p className="text-xs text-muted-foreground/60">
-            Redirecting automatically in {countdown} second{countdown !== 1 ? "s" : ""}...
+            Redirecting in {countdown} second{countdown !== 1 ? "s" : ""}...
           </p>
         </div>
 

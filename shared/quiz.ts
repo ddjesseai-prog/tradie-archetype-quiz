@@ -1,4 +1,4 @@
-// Tradie Quiz — Master Execution Spec v2
+// Tradie Quiz - Master Execution Spec v2
 // 5 Archetypes, 20 Questions, Deterministic +1 Scoring
 // Tiebreak: HT > SO > PC > RB > VC
 
@@ -34,10 +34,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 1,
     text: "A client calls asking for a quote on a job that is not quite in your wheelhouse. What do you do?",
     options: [
-      { id: "q1a", text: "Pass on it — you only take jobs you can do to your standard", scores: { PC: 1 } },
+      { id: "q1a", text: "Pass on it - you only take jobs you can do to your standard", scores: { PC: 1 } },
       { id: "q1b", text: "Assess whether it fits your systems and capacity before committing", scores: { SO: 1 } },
-      { id: "q1c", text: "Decline — it does not match your niche or your rate", scores: { HT: 1 } },
-      { id: "q1d", text: "Quote it anyway — work is work and you will figure it out", scores: { VC: 1 } },
+      { id: "q1c", text: "Decline - it does not match your niche or your rate", scores: { HT: 1 } },
+      { id: "q1d", text: "Quote it anyway - work is work and you will figure it out", scores: { VC: 1 } },
     ],
   },
   {
@@ -56,10 +56,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 3,
     text: "A job runs over budget due to unexpected site conditions. How do you handle it?",
     options: [
-      { id: "q3a", text: "Absorb it — you quoted it and you stand by your word", scores: { PC: 1 } },
-      { id: "q3b", text: "Issue a variation order immediately — your contract covers this", scores: { SO: 1 } },
-      { id: "q3c", text: "Have a direct conversation and charge accordingly — you do not work for free", scores: { HT: 1 } },
-      { id: "q3d", text: "Move on and price it into the next job — it evens out", scores: { VC: 1 } },
+      { id: "q3a", text: "Absorb it - you quoted it and you stand by your word", scores: { PC: 1 } },
+      { id: "q3b", text: "Issue a variation order immediately - your contract covers this", scores: { SO: 1 } },
+      { id: "q3c", text: "Have a direct conversation and charge accordingly - you do not work for free", scores: { HT: 1 } },
+      { id: "q3d", text: "Move on and price it into the next job - it evens out", scores: { VC: 1 } },
     ],
   },
   {
@@ -81,7 +81,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { id: "q5a", text: "Based on the complexity and the time it takes to do it properly", scores: { PC: 1 } },
       { id: "q5b", text: "From a costed template that accounts for labour, materials, and margin", scores: { SO: 1 } },
       { id: "q5c", text: "Based on the value delivered to the client, not just the hours", scores: { HT: 1 } },
-      { id: "q5d", text: "Competitive market rate — you need to win the job first", scores: { VC: 1 } },
+      { id: "q5d", text: "Competitive market rate - you need to win the job first", scores: { VC: 1 } },
     ],
   },
   {
@@ -89,10 +89,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 6,
     text: "A client pushes back on your price. What is your instinct?",
     options: [
-      { id: "q6a", text: "Explain the detail and quality that justifies it — and hold the price", scores: { PC: 1 } },
+      { id: "q6a", text: "Explain the detail and quality that justifies it - and hold the price", scores: { PC: 1 } },
       { id: "q6b", text: "Show them the scope breakdown and what they are actually getting", scores: { SO: 1 } },
-      { id: "q6c", text: "Walk away — clients who argue price are not your clients", scores: { HT: 1 } },
-      { id: "q6d", text: "Negotiate — getting the job at a lower margin is better than losing it", scores: { VC: 1 } },
+      { id: "q6c", text: "Walk away - clients who argue price are not your clients", scores: { HT: 1 } },
+      { id: "q6d", text: "Negotiate - getting the job at a lower margin is better than losing it", scores: { VC: 1 } },
     ],
   },
   {
@@ -103,7 +103,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { id: "q7a", text: "Not enough clients who appreciate quality and are willing to pay for it", scores: { PC: 1 } },
       { id: "q7b", text: "The business still depends too much on me being hands-on", scores: { SO: 1 } },
       { id: "q7c", text: "I am not visible enough to the clients who would pay my real rate", scores: { HT: 1 } },
-      { id: "q7d", text: "Inconsistent lead flow — some months are great, others are slow", scores: { VC: 1 } },
+      { id: "q7d", text: "Inconsistent lead flow - some months are great, others are slow", scores: { VC: 1 } },
     ],
   },
   {
@@ -111,9 +111,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 8,
     text: "How do you feel about hiring and managing a team?",
     options: [
-      { id: "q8a", text: "Cautious — most people do not meet the standard I hold myself to", scores: { PC: 1 } },
-      { id: "q8b", text: "It is essential — a business that cannot run without me is not a business", scores: { SO: 1 } },
-      { id: "q8c", text: "I prefer a small, trusted crew — quality over headcount", scores: { HT: 1 } },
+      { id: "q8a", text: "Cautious - most people do not meet the standard I hold myself to", scores: { PC: 1 } },
+      { id: "q8b", text: "It is essential - a business that cannot run without me is not a business", scores: { SO: 1 } },
+      { id: "q8c", text: "I prefer a small, trusted crew - quality over headcount", scores: { HT: 1 } },
       { id: "q8d", text: "The more good people I can get, the more work I can take on", scores: { VC: 1 } },
     ],
   },
@@ -122,9 +122,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 9,
     text: "A past client refers you to someone who then asks for a discount. What do you do?",
     options: [
-      { id: "q9a", text: "Politely decline — your price reflects your standard, not who referred them", scores: { PC: 1 } },
-      { id: "q9b", text: "Stick to your quoted rate — discounting undermines the whole model", scores: { SO: 1 } },
-      { id: "q9c", text: "No discount — if they need to ask, they are probably not the right fit", scores: { HT: 1 } },
+      { id: "q9a", text: "Politely decline - your price reflects your standard, not who referred them", scores: { PC: 1 } },
+      { id: "q9b", text: "Stick to your quoted rate - discounting undermines the whole model", scores: { SO: 1 } },
+      { id: "q9c", text: "No discount - if they need to ask, they are probably not the right fit", scores: { HT: 1 } },
       { id: "q9d", text: "Offer a small one to secure the relationship and keep the referral chain going", scores: { VC: 1 } },
     ],
   },
@@ -133,10 +133,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 10,
     text: "How do you handle your reputation online?",
     options: [
-      { id: "q10a", text: "My work speaks for itself — I rely on photos and word of mouth", scores: { RB: 1 } },
+      { id: "q10a", text: "My work speaks for itself - I rely on photos and word of mouth", scores: { RB: 1 } },
       { id: "q10b", text: "I have a process for requesting reviews and following up after jobs", scores: { SO: 1 } },
-      { id: "q10c", text: "I am selective about where I appear — I want to be seen in the right places", scores: { HT: 1 } },
-      { id: "q10d", text: "I am active everywhere — the more visible the better", scores: { VC: 1 } },
+      { id: "q10c", text: "I am selective about where I appear - I want to be seen in the right places", scores: { HT: 1 } },
+      { id: "q10d", text: "I am active everywhere - the more visible the better", scores: { VC: 1 } },
     ],
   },
   {
@@ -155,8 +155,8 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 12,
     text: "How do you think about your brand right now?",
     options: [
-      { id: "q12a", text: "My reputation is my brand — built job by job over years", scores: { RB: 1 } },
-      { id: "q12b", text: "I have not really thought about it — I just focus on the work", scores: { PC: 1 } },
+      { id: "q12a", text: "My reputation is my brand - built job by job over years", scores: { RB: 1 } },
+      { id: "q12b", text: "I have not really thought about it - I just focus on the work", scores: { PC: 1 } },
       { id: "q12c", text: "It is something I know I need to develop properly", scores: { SO: 1 } },
       { id: "q12d", text: "I know what I stand for but it is not clearly communicated yet", scores: { HT: 1 } },
     ],
@@ -166,9 +166,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 13,
     text: "What is your relationship with technology and systems in your business?",
     options: [
-      { id: "q13a", text: "Minimal — I prefer to keep things simple and personal", scores: { PC: 1 } },
-      { id: "q13b", text: "Heavy — quoting software, job management, invoicing, all automated", scores: { SO: 1 } },
-      { id: "q13c", text: "Selective — I use what helps me deliver a premium experience", scores: { HT: 1 } },
+      { id: "q13a", text: "Minimal - I prefer to keep things simple and personal", scores: { PC: 1 } },
+      { id: "q13b", text: "Heavy - quoting software, job management, invoicing, all automated", scores: { SO: 1 } },
+      { id: "q13c", text: "Selective - I use what helps me deliver a premium experience", scores: { HT: 1 } },
       { id: "q13d", text: "Whatever helps me move faster and take on more volume", scores: { VC: 1 } },
     ],
   },
@@ -188,7 +188,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 15,
     text: "When you finish a job, what matters most to you?",
     options: [
-      { id: "q15a", text: "That the finish is exactly what I envisioned — no compromises", scores: { PC: 1 } },
+      { id: "q15a", text: "That the finish is exactly what I envisioned - no compromises", scores: { PC: 1 } },
       { id: "q15b", text: "That it was delivered on time, on budget, and the client is satisfied", scores: { SO: 1 } },
       { id: "q15c", text: "That the client sees the value and will refer others at the same level", scores: { HT: 1 } },
       { id: "q15d", text: "That it is done, invoiced, and the next one is already lined up", scores: { VC: 1 } },
@@ -210,10 +210,10 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 17,
     text: "How do you feel when a competitor undercuts your price and wins the job?",
     options: [
-      { id: "q17a", text: "Frustrated but not surprised — most people do not understand what quality costs", scores: { PC: 1 } },
-      { id: "q17b", text: "Indifferent — if they want the cheapest option, they are not my client", scores: { SO: 1 } },
-      { id: "q17c", text: "Completely unbothered — we are not competing for the same clients", scores: { HT: 1 } },
-      { id: "q17d", text: "Annoyed — I will adjust my approach to win more of those jobs next time", scores: { VC: 1 } },
+      { id: "q17a", text: "Frustrated but not surprised - most people do not understand what quality costs", scores: { PC: 1 } },
+      { id: "q17b", text: "Indifferent - if they want the cheapest option, they are not my client", scores: { SO: 1 } },
+      { id: "q17c", text: "Completely unbothered - we are not competing for the same clients", scores: { HT: 1 } },
+      { id: "q17d", text: "Annoyed - I will adjust my approach to win more of those jobs next time", scores: { VC: 1 } },
     ],
   },
   {
@@ -221,7 +221,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 18,
     text: "What would you most like your business to be known for in five years?",
     options: [
-      { id: "q18a", text: "The standard of work — the name people mention when quality matters", scores: { RB: 1 } },
+      { id: "q18a", text: "The standard of work - the name people mention when quality matters", scores: { RB: 1 } },
       { id: "q18b", text: "A reliable, professional operation that delivers every time", scores: { SO: 1 } },
       { id: "q18c", text: "The go-to expert for a specific type of high-value project", scores: { HT: 1 } },
       { id: "q18d", text: "One of the biggest and most active contractors in the region", scores: { VC: 1 } },
@@ -232,7 +232,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     number: 19,
     text: "How do you currently present your business to new clients?",
     options: [
-      { id: "q19a", text: "Photos of past work and word of mouth — the work sells itself", scores: { PC: 1 } },
+      { id: "q19a", text: "Photos of past work and word of mouth - the work sells itself", scores: { PC: 1 } },
       { id: "q19b", text: "A clear process, professional quote, and structured onboarding", scores: { SO: 1 } },
       { id: "q19c", text: "A curated portfolio and a conversation about what they are trying to achieve", scores: { HT: 1 } },
       { id: "q19d", text: "Fast response, competitive price, and availability", scores: { VC: 1 } },
@@ -246,7 +246,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       { id: "q20a", text: "That clients understood the difference between my work and everyone else's", scores: { PC: 1 } },
       { id: "q20b", text: "That we looked as professional on the outside as we are on the inside", scores: { SO: 1 } },
       { id: "q20c", text: "That the right clients knew I existed and what I was capable of", scores: { HT: 1 } },
-      { id: "q20d", text: "That we were seen as a serious, established operation — not just another tradie", scores: { RB: 1 } },
+      { id: "q20d", text: "That we were seen as a serious, established operation - not just another tradie", scores: { RB: 1 } },
     ],
   },
 ];

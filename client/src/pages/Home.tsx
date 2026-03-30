@@ -10,12 +10,12 @@ const ARCHETYPE_PREVIEWS = [
 ];
 
 const PLAYBOOK_ITEMS = [
-  "Your exact positioning statement — how to describe yourself so clients get it immediately",
-  "What to post on social, what to avoid, and the tone that fits your identity",
-  "Who your ideal client is — and who you should walk away from",
-  "Whether you're a budget, mid-market, or premium brand — and how to own it",
+  "Your exact positioning statement: how to describe yourself so clients get it immediately",
+  "What to post, what to avoid, and the tone that fits who you are",
+  "Who your ideal client is, and who you should walk away from",
+  "Your pricing tier and how to own it without apologising",
   "Visual direction: colours, language style, and what your brand should feel like",
-  "Your #1 growth blocker — and the specific move to break through it",
+  "Your biggest growth blocker and the one move to fix it",
 ];
 
 const SOCIAL_PROOF = [
@@ -52,25 +52,21 @@ export default function Home() {
         {/* Headline */}
         <div className="animate-fade-in-up opacity-0 delay-200 text-center max-w-3xl mx-auto mb-5 z-10">
           <h1 className="text-[2.6rem] sm:text-5xl md:text-[4.2rem] lg:text-7xl font-black leading-[1.03] tracking-tight">
-            You're not struggling
-            <br />
-            with{" "}
-            <span className="text-primary">business.</span>
+            More jobs.{" "}
+            <span className="text-primary">Better jobs.</span>
           </h1>
           <h1 className="text-[2.6rem] sm:text-5xl md:text-[4.2rem] lg:text-7xl font-black leading-[1.03] tracking-tight mt-1">
-            You're{" "}
+            Higher pay.{" "}
             <span className="relative inline-block">
-              <span className="relative z-10">misaligned</span>
+              <span className="relative z-10">Less bullshit.</span>
               <span className="absolute left-0 right-0 h-[3px] bg-primary rounded-full" style={{ bottom: "6px" }} />
-            </span>{" "}
-            with your brand.
+            </span>
           </h1>
         </div>
 
         {/* Sub-headline */}
         <p className="animate-fade-in-up opacity-0 delay-300 text-base sm:text-lg text-muted-foreground text-center max-w-lg mx-auto mb-8 leading-relaxed z-10">
-          Take the quiz. Discover your tradie archetype. Get a brand playbook
-          built specifically for how you work — in under 5 minutes.
+          Take the quiz. Get your tradie archetype and a clear plan to win better work.
         </p>
 
         {/* Primary CTA */}
@@ -79,7 +75,7 @@ export default function Home() {
             onClick={() => navigate("/quiz")}
             className="group w-full flex items-center justify-center gap-3 bg-primary text-primary-foreground font-black text-lg px-8 py-5 rounded-2xl hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-xl shadow-primary/25"
           >
-            Find My Archetype — Free
+            Find My Archetype. Free.
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
@@ -129,7 +125,7 @@ export default function Home() {
               Six sections. Zero fluff.
             </h2>
             <p className="text-muted-foreground mt-3 max-w-md mx-auto text-sm leading-relaxed">
-              Every answer is specific to your archetype — not generic advice that applies to everyone and helps no one.
+              Every answer is specific to your archetype. Not generic advice that applies to everyone and helps no one.
             </p>
           </div>
 
@@ -149,7 +145,7 @@ export default function Home() {
               onClick={() => navigate("/quiz")}
               className="group inline-flex items-center gap-3 bg-primary text-primary-foreground font-black text-base px-8 py-4 rounded-xl hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/20"
             >
-              Get My Playbook — It's Free
+              Get My Playbook. It's Free.
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -160,10 +156,10 @@ export default function Home() {
       <section className="py-20 px-4 border-t border-border">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
-            <p className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">The 7 Archetypes</p>
+            <p className="text-xs font-bold tracking-[0.2em] uppercase text-primary mb-3">The 5 Archetypes</p>
             <h2 className="text-3xl sm:text-4xl font-black leading-tight mb-3">Which one are you?</h2>
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
-              Every tradie fits one of these identities. The quiz figures out which one — and gives you the exact playbook for it.
+              Every tradie fits one of these. The quiz works out which one and gives you the exact playbook for it.
             </p>
           </div>
 
@@ -193,7 +189,7 @@ export default function Home() {
               onClick={() => navigate("/quiz")}
               className="group inline-flex items-center gap-3 bg-primary text-primary-foreground font-black text-base px-8 py-4 rounded-xl hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
             >
-              Start the Quiz — Takes 5 Minutes
+              Start the Quiz. Takes 90 Seconds.
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
@@ -209,7 +205,7 @@ export default function Home() {
             <span className="text-primary">the right brand.</span>
           </h2>
           <p className="text-muted-foreground text-sm mb-8 max-w-md mx-auto leading-relaxed">
-            Most tradies spend years figuring out what works. This quiz gives you the answer in 5 minutes — for free.
+            Most tradies spend years working out what actually works. This quiz gives you the answer in 90 seconds. Free.
           </p>
           <button
             onClick={() => navigate("/quiz")}

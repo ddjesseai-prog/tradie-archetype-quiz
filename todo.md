@@ -149,3 +149,13 @@
 - [x] Update Home page copy: headline, archetype names, and feature list to reflect 5-archetype system
 - [ ] Write vitest tests for Stripe checkout procedure (pending Calendly URL)
 - [ ] Save checkpoint
+
+## Phase 14: Full De-AI Copy Audit
+
+- [ ] Rewrite Home page headline, subheadline, body copy, and all microcopy
+- [ ] Rewrite quiz questions and answers for conversational tradie tone
+- [ ] Rewrite all 5 archetype result texts in archetypes.ts
+- [ ] Rewrite Results.tsx microcopy (buttons, labels, gate copy, confirmations)
+- [ ] Rewrite email template copy
+- [ ] Remove all em dashes, buzzwords, and AI-style phrasing across all files
+- [ ] Run tests and save checkpoint
