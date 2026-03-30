@@ -14,6 +14,7 @@ export async function logLeadToSheets({
   secondaryArchetype,
   submissionId,
   playbookLink,
+  emailSent,
 }: {
   firstName: string | null;
   email: string;
@@ -21,6 +22,7 @@ export async function logLeadToSheets({
   secondaryArchetype: string | null;
   submissionId: number;
   playbookLink: string;
+  emailSent: boolean;
 }): Promise<{ success: boolean; error?: string }> {
   const token = process.env.GOOGLE_WORKSPACE_CLI_TOKEN;
 
@@ -39,10 +41,11 @@ export async function logLeadToSheets({
     secondaryArchetype ?? "",
     String(submissionId),
     playbookLink,
+    emailSent ? "sent" : "failed",
   ];
 
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME + "!A:G")}:append?valueInputOption=RAW`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME + "!A:H")}:append?valueInputOption=RAW`;
 
     const res = await fetch(url, {
       method: "POST",

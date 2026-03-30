@@ -1,0 +1,85 @@
+{
+  "query": "SHOW TABLES; SELECT id, sessionId, primaryArchetype, secondaryArchetype, createdAt FROM quiz_submissions ORDER BY createdAt DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute SHOW TABLES; SELECT id, sessionId, primaryArchetype, secondaryArchetype, createdAt FROM quiz_submissions ORDER BY createdAt DESC LIMIT 20;",
+  "rows": [
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "email_captures"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "quiz_submissions"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "users"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "id\tsessionId\tprimaryArchetype\tsecondaryArchetype\tcreatedAt"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330012\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:52"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330007\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330009\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330006\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330008\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330011\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330010\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330002\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330001\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330005\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330003\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "330004\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "300001\ttest-123\tcraftsman\tNULL\t2026-03-27 11:05:59"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270006\tfull-prod-test-1774608385\tcraftsman\tNULL\t2026-03-27 10:46:26"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270005\ttransformer-test\tcraftsman\tNULL\t2026-03-27 10:45:45"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270004\ttest\tcraftsman\tNULL\t2026-03-27 10:45:24"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270003\tfull-test-1774608317\tcraftsman\tNULL\t2026-03-27 10:45:17"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270002\taudit-test-1774608271\tcraftsman\tNULL\t2026-03-27 10:44:32"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "270001\ttest-123\tcraftsman\tNULL\t2026-03-27 10:44:18"
+    },
+    {
+      "Tables_in_QnyeSx8s548idVXmYjbqZt": "240004\tekiRFCpoWrhpt34EDXui0\toperator\tleader\t2026-03-27 00:46:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_QnyeSx8s548idVXmYjbqZt\n__drizzle_migrations\nemail_captures\nquiz_submissions\nusers\nid\tsessionId\tprimaryArchetype\tsecondaryArchetype\tcreatedAt\n330012\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:52\n330007\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330009\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330006\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330008\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330011\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330010\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:51\n330002\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50\n330001\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50\n330005\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50\n330003\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50\n330004\tMA1QdEZxC6vNPLxy5ZC8-\tSO\tNULL\t2026-03-30 04:34:50\n300001\ttest-123\tcraftsman\tNULL\t2026-03-27 11:05:59\n270006\tfull-prod-test-1774608385\tcraftsman\tNULL\t2026-03-27 10:46:26\n270005\ttransformer-test\tcraftsman\tNULL\t2026-03-27 10:45:45\n270004\ttest\tcraftsman\tNULL\t2026-03-27 10:45:24\n270003\tfull-test-1774608317\tcraftsman\tNULL\t2026-03-27 10:45:17\n270002\taudit-test-1774608271\tcraftsman\tNULL\t2026-03-27 10:44:32\n270001\ttest-123\tcraftsman\tNULL\t2026-03-27 10:44:18\n240004\tekiRFCpoWrhpt34EDXui0\toperator\tleader\t2026-03-27 00:46:00\n",
+  "stderr": "",
+  "execution_time_ms": 1807
+}

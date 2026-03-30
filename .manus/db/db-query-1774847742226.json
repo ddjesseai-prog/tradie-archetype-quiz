@@ -1,0 +1,85 @@
+{
+  "query": "DESCRIBE email_captures; SELECT * FROM email_captures ORDER BY createdAt DESC LIMIT 30;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute DESCRIBE email_captures; SELECT * FROM email_captures ORDER BY createdAt DESC LIMIT 30;",
+  "rows": [
+    {
+      "Field": "id",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "NULL",
+      "Extra": "auto_increment"
+    },
+    {
+      "Field": "submissionId",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "email",
+      "Type": "varchar(320)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "firstName",
+      "Type": "varchar(128)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "archetypeId",
+      "Type": "varchar(32)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "emailSent",
+      "Type": "enum('pending','sent','failed')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "pending",
+      "Extra": ""
+    },
+    {
+      "Field": "createdAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    }
+  ],
+  "messages": [
+    "id\tsubmissionId\temail\tfirstName\tarchetypeId\temailSent\tcreatedAt",
+    "240001\t330012\tjesse@dreamdealer.com.au\tjesse Hunter\tSO\tsent\t2026-03-30 04:35:07",
+    "210001\t9999\tmanus-test@example.com\tManusTest\tcraftsman\tfailed\t2026-03-29 06:46:23",
+    "180001\t270001\ttest@example.com\tTest\tcraftsman\tfailed\t2026-03-27 10:44:32",
+    "150002\t1\ttest@test.com\tTest\tcraftsman\tfailed\t2026-03-27 01:03:08",
+    "150001\t1\ttest@test.com\tTest\tcraftsman\tfailed\t2026-03-27 01:02:34",
+    "120001\t240005\tblake6502@icloud.com\tBlake\toperator\tfailed\t2026-03-27 00:46:52",
+    "90005\t90001\tjhunterinvest@gmail.com\tjayme haych\toperator\tfailed\t2026-03-25 11:41:44",
+    "90004\t1\tjesse@dreamdealer.com.au\tDebug Test\tleader\tsent\t2026-03-25 11:31:57",
+    "90003\t1\tjesse@dreamdealer.com.au\tLive Test 2\toperator\tsent\t2026-03-25 11:30:00",
+    "90002\t1\tjesse@dreamdealer.com.au\tLive Test\tcraftsman\tsent\t2026-03-25 11:29:31",
+    "90001\t1\tjesse@dreamdealer.com.au\tTest User\thustler\tsent\t2026-03-25 11:27:56",
+    "60002\t60003\tjordan.shay@live.com\tJordan\toperator\tfailed\t2026-03-25 09:24:08",
+    "60001\t60001\tjesse@dreamdealer.com.au\tJesse hunter\toperator\tsent\t2026-03-25 09:12:59",
+    "30002\t999\tmanus-test@example.com\tTest\tcraftsman\tfailed\t2026-03-25 08:09:09",
+    "30001\t30001\tjesse@dreamdealer.com.au\tJesse\thustler\tfailed\t2026-03-25 08:06:21",
+    "2\t2\tjesse@dreamdealer.com.au\tJesse Hunter \toperator\tsent\t2026-03-25 07:40:35",
+    "1\t1\tJesse@dreamdealer.com.au\tJesse Hunter\thustler\tsent\t2026-03-25 07:36:23"
+  ],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nid\tint\tNO\tPRI\tNULL\tauto_increment\nsubmissionId\tint\tNO\t\tNULL\t\nemail\tvarchar(320)\tNO\t\tNULL\t\nfirstName\tvarchar(128)\tYES\t\tNULL\t\narchetypeId\tvarchar(32)\tNO\t\tNULL\t\nemailSent\tenum('pending','sent','failed')\tNO\t\tpending\t\ncreatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t\nid\tsubmissionId\temail\tfirstName\tarchetypeId\temailSent\tcreatedAt\n240001\t330012\tjesse@dreamdealer.com.au\tjesse Hunter\tSO\tsent\t2026-03-30 04:35:07\n210001\t9999\tmanus-test@example.com\tManusTest\tcraftsman\tfailed\t2026-03-29 06:46:23\n180001\t270001\ttest@example.com\tTest\tcraftsman\tfailed\t2026-03-27 10:44:32\n150002\t1\ttest@test.com\tTest\tcraftsman\tfailed\t2026-03-27 01:03:08\n150001\t1\ttest@test.com\tTest\tcraftsman\tfailed\t2026-03-27 01:02:34\n120001\t240005\tblake6502@icloud.com\tBlake\toperator\tfailed\t2026-03-27 00:46:52\n90005\t90001\tjhunterinvest@gmail.com\tjayme haych\toperator\tfailed\t2026-03-25 11:41:44\n90004\t1\tjesse@dreamdealer.com.au\tDebug Test\tleader\tsent\t2026-03-25 11:31:57\n90003\t1\tjesse@dreamdealer.com.au\tLive Test 2\toperator\tsent\t2026-03-25 11:30:00\n90002\t1\tjesse@dreamdealer.com.au\tLive Test\tcraftsman\tsent\t2026-03-25 11:29:31\n90001\t1\tjesse@dreamdealer.com.au\tTest User\thustler\tsent\t2026-03-25 11:27:56\n60002\t60003\tjordan.shay@live.com\tJordan\toperator\tfailed\t2026-03-25 09:24:08\n60001\t60001\tjesse@dreamdealer.com.au\tJesse hunter\toperator\tsent\t2026-03-25 09:12:59\n30002\t999\tmanus-test@example.com\tTest\tcraftsman\tfailed\t2026-03-25 08:09:09\n30001\t30001\tjesse@dreamdealer.com.au\tJesse\thustler\tfailed\t2026-03-25 08:06:21\n2\t2\tjesse@dreamdealer.com.au\tJesse Hunter \toperator\tsent\t2026-03-25 07:40:35\n1\t1\tJesse@dreamdealer.com.au\tJesse Hunter\thustler\tsent\t2026-03-25 07:36:23\n",
+  "stderr": "",
+  "execution_time_ms": 1883
+}

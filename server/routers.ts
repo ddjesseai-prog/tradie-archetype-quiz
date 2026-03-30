@@ -180,7 +180,7 @@ export const appRouter = router({
           console.error(`[Email] Failed for ${input.email}:`, emailResult.error);
         }
 
-        // ── 2. Log to Google Sheets ──────────────────────────────────
+        // ── 2. Log to Google Sheets (always runs regardless of email outcome) ──
         const sheetsResult = await logLeadToSheets({
           firstName: input.firstName ?? null,
           email: input.email,
@@ -188,6 +188,7 @@ export const appRouter = router({
           secondaryArchetype: input.secondaryArchetypeId ?? null,
           submissionId: input.submissionId,
           playbookLink,
+          emailSent: emailResult.success,
         });
 
         if (sheetsResult.success) {

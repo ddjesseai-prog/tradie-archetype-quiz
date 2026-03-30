@@ -1,0 +1,55 @@
+{
+  "query": "SELECT id, submissionId, email, firstName, archetypeId, emailSent, createdAt FROM email_captures ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute SELECT id, submissionId, email, firstName, archetypeId, emailSent, createdAt FROM email_captures ORDER BY createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "270001",
+      "submissionId": "360006",
+      "email": "Billc@outlook.com",
+      "firstName": "Bill Cunner",
+      "archetypeId": "VC",
+      "emailSent": "failed",
+      "createdAt": "2026-03-30 05:25:08"
+    },
+    {
+      "id": "240001",
+      "submissionId": "330012",
+      "email": "jesse@dreamdealer.com.au",
+      "firstName": "jesse Hunter",
+      "archetypeId": "SO",
+      "emailSent": "sent",
+      "createdAt": "2026-03-30 04:35:07"
+    },
+    {
+      "id": "210001",
+      "submissionId": "9999",
+      "email": "manus-test@example.com",
+      "firstName": "ManusTest",
+      "archetypeId": "craftsman",
+      "emailSent": "failed",
+      "createdAt": "2026-03-29 06:46:23"
+    },
+    {
+      "id": "180001",
+      "submissionId": "270001",
+      "email": "test@example.com",
+      "firstName": "Test",
+      "archetypeId": "craftsman",
+      "emailSent": "failed",
+      "createdAt": "2026-03-27 10:44:32"
+    },
+    {
+      "id": "150002",
+      "submissionId": "1",
+      "email": "test@test.com",
+      "firstName": "Test",
+      "archetypeId": "craftsman",
+      "emailSent": "failed",
+      "createdAt": "2026-03-27 01:03:08"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsubmissionId\temail\tfirstName\tarchetypeId\temailSent\tcreatedAt\n270001\t360006\tBillc@outlook.com\tBill Cunner\tVC\tfailed\t2026-03-30 05:25:08\n240001\t330012\tjesse@dreamdealer.com.au\tjesse Hunter\tSO\tsent\t2026-03-30 04:35:07\n210001\t9999\tmanus-test@example.com\tManusTest\tcraftsman\tfailed\t2026-03-29 06:46:23\n180001\t270001\ttest@example.com\tTest\tcraftsman\tfailed\t2026-03-27 10:44:32\n150002\t1\ttest@test.com\tTest\tcraftsman\tfailed\t2026-03-27 01:03:08\n",
+  "stderr": "",
+  "execution_time_ms": 1495
+}

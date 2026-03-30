@@ -1,0 +1,8 @@
+{
+  "query": "SELECT id, email, first_name, primary_archetype, secondary_archetype, playbook_unlocked, created_at FROM quiz_submissions ORDER BY created_at DESC LIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4RBzv9DsHyTEtp9.4b2f3de94c81 --database QnyeSx8s548idVXmYjbqZt --execute SELECT id, email, first_name, primary_archetype, secondary_archetype, playbook_unlocked, created_at FROM quiz_submissions ORDER BY created_at DESC LIMIT 50;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'email' in 'field list'"
+  ]
+}
