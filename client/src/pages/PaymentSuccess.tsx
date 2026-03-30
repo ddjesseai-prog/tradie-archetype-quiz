@@ -4,8 +4,8 @@ import { CheckCircle2, ArrowRight, Calendar } from "lucide-react";
 import { ARCHETYPES } from "../../../shared/archetypes";
 import type { ArchetypeId } from "../../../shared/archetypes";
 
-// Calendly booking URL — update this with the real link
-const CALENDLY_URL = "https://calendly.com/jesse-hunter/brand-audit";
+// Google Calendar appointment booking link
+const BOOKING_URL = "https://calendar.app.google/TYBu1hoGu8V4Zdvs8";
 
 export default function PaymentSuccess() {
   const [, navigate] = useLocation();
@@ -21,7 +21,7 @@ export default function PaymentSuccess() {
   // Auto-redirect to Calendly after 5 seconds
   useEffect(() => {
     if (countdown <= 0) {
-      window.location.href = CALENDLY_URL;
+      window.location.href = BOOKING_URL;
       return;
     }
     const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
@@ -73,13 +73,13 @@ export default function PaymentSuccess() {
         {/* Calendly CTA */}
         <div className="space-y-3">
           <a
-            href={CALENDLY_URL}
+            href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-black py-5 rounded-xl text-lg hover:bg-primary/90 active:scale-[0.98] transition-all shadow-xl shadow-primary/25"
           >
             <Calendar size={20} />
-            Book My Session Now
+            Book My Session on Google Calendar
             <ArrowRight size={20} />
           </a>
           <p className="text-xs text-muted-foreground/60">
