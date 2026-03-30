@@ -335,7 +335,7 @@ export default function Results() {
           </div>
           <div className="animate-fade-in-up opacity-0 delay-200">
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              {archetype.identityDescription}
+              {archetype.identity}
             </p>
           </div>
           {secondaryArchetype && (
@@ -361,15 +361,15 @@ export default function Results() {
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="text-xs font-black tracking-widest uppercase text-primary mb-4">Your Strengths</h3>
               <ul className="space-y-2">
-                {archetype.strengths.slice(0, 3).map((s) => (
+                {archetype.mirrorStatements.slice(0, 3).map((s) => (
                   <li key={s} className="flex items-start gap-2 text-sm">
                     <span className="text-primary mt-0.5">✓</span>
                     <span className="text-muted-foreground">{s}</span>
                   </li>
                 ))}
-                {archetype.strengths.length > 3 && (
+                {archetype.mirrorStatements.length > 3 && (
                   <li className="text-xs text-muted-foreground/50 pl-5">
-                    +{archetype.strengths.length - 3} more in your playbook
+                    +{archetype.mirrorStatements.length - 3} more in your playbook
                   </li>
                 )}
               </ul>
@@ -377,15 +377,15 @@ export default function Results() {
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="text-xs font-black tracking-widest uppercase text-destructive/70 mb-4">Watch Out For</h3>
               <ul className="space-y-2">
-                {archetype.weaknesses.slice(0, 3).map((w) => (
+                {archetype.universalTruths.slice(0, 3).map((w) => (
                   <li key={w} className="flex items-start gap-2 text-sm">
                     <span className="text-destructive/70 mt-0.5">!</span>
                     <span className="text-muted-foreground">{w}</span>
                   </li>
                 ))}
-                {archetype.weaknesses.length > 3 && (
+                {archetype.universalTruths.length > 3 && (
                   <li className="text-xs text-muted-foreground/50 pl-5">
-                    +{archetype.weaknesses.length - 3} more in your playbook
+                    +{archetype.universalTruths.length - 3} more in your playbook
                   </li>
                 )}
               </ul>
@@ -532,8 +532,8 @@ export default function Results() {
                       <p className="text-sm text-foreground">{archetype.playbook.contentStrategy.toneOfVoice}</p>
                     </div>
                     <div className="bg-secondary/30 rounded-lg p-3">
-                      <p className="text-xs font-semibold text-muted-foreground mb-1">Filming Style</p>
-                      <p className="text-sm text-foreground">{archetype.playbook.contentStrategy.filmingStyle}</p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-1">Action This Week</p>
+                      <p className="text-sm text-foreground">{archetype.playbook.actionThisWeek}</p>
                     </div>
                   </div>
                 </div>
@@ -628,7 +628,7 @@ export default function Results() {
             <div className="bg-card border border-border rounded-xl p-5">
               <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-4">How You Show Up</h3>
               <ul className="space-y-2">
-                {archetype.defaultBehaviours.map((b) => (
+                {archetype.universalTruths.map((b) => (
                   <li key={b} className="flex items-start gap-2 text-sm">
                     <span className="text-primary mt-0.5">→</span>
                     <span className="text-muted-foreground">{b}</span>
@@ -640,7 +640,7 @@ export default function Results() {
             {/* Market perception */}
             <div className="bg-secondary/30 border border-border rounded-xl p-5">
               <h3 className="text-xs font-black tracking-widest uppercase text-muted-foreground mb-3">How the Market Sees You</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">{archetype.marketPerception}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{archetype.tension}</p>
             </div>
 
           </div>

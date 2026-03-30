@@ -6,26 +6,24 @@ export function buildPlaybookEmail(
   playbookLink: string,
 ): { subject: string; text: string } {
   const greeting = firstName ? `G'day ${firstName},` : "G'day,";
-  const subject = `Your Brand Archetype: ${archetype.name} — Here's Your Playbook`;
+  const subject = `Your Tradie Archetype: ${archetype.name}`;
 
   const textContent = `${greeting}
 
 You just took the Tradie Brand Archetype Quiz — and your result is in.
 
-You're ${archetype.name}.
+You are ${archetype.name}.
 
 "${archetype.tagline}"
 
-${archetype.identityDescription}
+${archetype.identity}
 
-──────────────────────────────────────────
 VIEW YOUR FULL BRAND PLAYBOOK HERE:
 ${playbookLink}
-──────────────────────────────────────────
 
-Bookmark that link. It's your personalised brand playbook — built specifically for how you work.
+Bookmark that link. It is your personalised brand playbook — built specifically for how you work.
 
-Here's a quick summary of what's inside:
+Here is a quick summary of what is inside:
 
 YOUR BRAND PLAYBOOK
 ===================
@@ -41,21 +39,20 @@ ${archetype.playbook.positioning.whatToBeKnownFor}
 CONTENT STRATEGY
 ----------------
 What to post:
-${archetype.playbook.contentStrategy.whatToPost.map((p) => `• ${p}`).join("\n")}
+${archetype.playbook.contentStrategy.whatToPost.map((p) => `- ${p}`).join("\n")}
 
 What NOT to post:
-${archetype.playbook.contentStrategy.whatNotToPost.map((p) => `• ${p}`).join("\n")}
+${archetype.playbook.contentStrategy.whatNotToPost.map((p) => `- ${p}`).join("\n")}
 
 Tone of voice: ${archetype.playbook.contentStrategy.toneOfVoice}
-Filming style: ${archetype.playbook.contentStrategy.filmingStyle}
 
 CLIENT TARGETING
 ----------------
 Who to attract:
-${archetype.playbook.clientTargeting.whoToAttract.map((p) => `• ${p}`).join("\n")}
+${archetype.playbook.clientTargeting.whoToAttract.map((p) => `- ${p}`).join("\n")}
 
 Who to avoid:
-${archetype.playbook.clientTargeting.whoToAvoid.map((p) => `• ${p}`).join("\n")}
+${archetype.playbook.clientTargeting.whoToAvoid.map((p) => `- ${p}`).join("\n")}
 
 PRICING STRATEGY
 ----------------
@@ -73,15 +70,13 @@ How you scale best:
 ${archetype.playbook.growthStrategy.howThisArchetypeScalesBest}
 
 What usually holds you back:
-${archetype.playbook.growthStrategy.commonBlockers.map((b) => `• ${b}`).join("\n")}
+${archetype.playbook.growthStrategy.commonBlockers.map((b) => `- ${b}`).join("\n")}
 
-──────────────────────────────────────────
-
-Now you know who you are. The question is — what are you going to do about it?
+Now you know who you are. The question is what are you going to do about it?
 
 Start with one thing. Pick your positioning statement, update your bio, and post one piece of content that actually sounds like you.
 
-That's it. One step.
+That is it. One step.
 
 View your full playbook anytime here:
 ${playbookLink}

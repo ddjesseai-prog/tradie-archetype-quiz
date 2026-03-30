@@ -1,185 +1,235 @@
-export type ArchetypeId =
-  | "craftsman"
-  | "operator"
-  | "hustler"
-  | "specialist"
-  | "leader"
-  | "guardian"
-  | "maverick";
+// Tradie Quiz — Master Execution Spec v2
+// 5 Archetypes: PC, SO, HT, VC, RB
+// Tiebreak: HT > SO > PC > RB > VC
+
+export type ArchetypeId = "PC" | "SO" | "HT" | "VC" | "RB";
+
+export const ARCHETYPE_ORDER: ArchetypeId[] = ["PC", "SO", "HT", "VC", "RB"];
+
+// Tiebreak priority (enforced when scores are equal)
+export const TIEBREAK_ORDER: ArchetypeId[] = ["HT", "SO", "PC", "RB", "VC"];
 
 export interface Archetype {
   id: ArchetypeId;
   name: string;
   tagline: string;
   emoji: string;
-  identityDescription: string;
-  strengths: string[];
-  weaknesses: string[];
-  defaultBehaviours: string[];
-  marketPerception: string;
-  playbook: BrandPlaybook;
-}
-
-export interface BrandPlaybook {
-  positioning: {
-    howToDescribeYourself: string;
-    whatToBeKnownFor: string;
+  // Results engine sections
+  identity: string;
+  universalTruths: string[];
+  mirrorStatements: string[];
+  immediateValue: {
+    leanInto: string;
+    holdingYouBack: string;
+    oneShift: string;
   };
-  contentStrategy: {
-    whatToPost: string[];
-    whatNotToPost: string[];
-    toneOfVoice: string;
-    filmingStyle: string;
+  reframe: string;
+  gap: string;
+  tension: string;
+  positioningSnapshot: {
+    pursue: string[];
+    avoid: string[];
+    howToPresent: string;
   };
-  clientTargeting: {
-    whoToAttract: string[];
-    whoToAvoid: string[];
+  transition: string;
+  // Brand playbook
+  playbook: {
+    positioning: {
+      howToDescribeYourself: string;
+      whatToBeKnownFor: string;
+    };
+    contentStrategy: {
+      whatToPost: string[];
+      whatNotToPost: string[];
+      toneOfVoice: string;
+    };
+    clientTargeting: {
+      whoToAttract: string[];
+      whoToAvoid: string[];
+    };
+    pricingStrategy: {
+      tier: "budget" | "mid" | "premium" | "ultra-premium";
+      guidance: string;
+    };
+    brandIdentity: {
+      visualDirection: string;
+      languageStyle: string;
+      colourPalette: string;
+    };
+    growthStrategy: {
+      howThisArchetypeScalesBest: string;
+      commonBlockers: string[];
+    };
+    actionThisWeek: string;
   };
-  pricingStrategy: {
-    tier: "budget" | "mid" | "premium";
-    guidance: string;
-  };
-  brandIdentity: {
-    visualDirection: string;
-    languageStyle: string;
-    colourPalette: string;
-  };
-  growthStrategy: {
-    howThisArchetypeScalesBest: string;
-    commonBlockers: string[];
-  };
-  actionThisWeek: string;
 }
 
 export const ARCHETYPES: Record<ArchetypeId, Archetype> = {
-  craftsman: {
-    id: "craftsman",
-    name: "The Craftsman",
-    tagline: "Built right. Every time.",
+  PC: {
+    id: "PC",
+    name: "The Precision Craftsman",
+    tagline: "Quality is your brand. Every job is a signature.",
     emoji: "🔨",
-    identityDescription:
-      "You're the tradie who gives a shit about the details. You take pride in doing the job properly — not just getting it done. You measure twice, cut once, and you'd rather lose a job than cut corners. Your work is your reputation, and you know it. The problem isn't your quality — it's that not enough people know about it.",
-    strengths: [
-      "Exceptional quality that earns repeat business without asking",
-      "Clients who find you become loyal for life — and refer everyone they know",
-      "Premium pricing power once your reputation is visible",
-      "Deep trade knowledge that builds instant client confidence",
-      "Your portfolio is your best sales tool — it does the work for you",
+    identity:
+      "You are The Precision Craftsman. You take more care than anyone else on site — and you know it. Every job you finish is a direct reflection of who you are. You do not cut corners. You do not rush. You would rather lose a job than deliver something you are not proud of. The work is the standard, and the standard is non-negotiable.",
+    universalTruths: [
+      "You have redone work that the client would never have noticed — because you noticed.",
+      "You have watched other tradies rush a job and felt something close to physical discomfort.",
+      "You have undercharged for work that took twice as long because you refused to do it any other way.",
+      "Clients who find you tend to stay with you for years — because no one else does it the way you do.",
+      "You find it genuinely hard to talk about yourself, even though your work speaks loudly.",
     ],
-    weaknesses: [
-      "Perfectionism slows you down — and you know it",
-      "You struggle to delegate because no one does it quite right",
-      "You're almost certainly undercharging for the quality you deliver",
-      "You're invisible online — great work, no megaphone",
-      "You find it hard to talk about yourself without feeling like you're showing off",
+    mirrorStatements: [
+      "You are not slow — you are thorough. There is a difference, and you know it.",
+      "You have a higher standard than most clients even know to ask for.",
+      "You take pride in the parts of the job no one else will ever see.",
+      "You measure twice because you have seen what happens when someone does not.",
+      "Your callbacks are almost zero — and that is not an accident.",
     ],
-    defaultBehaviours: [
-      "Spends extra time on finishing touches no one asked for — and doesn't charge for it",
-      "Gets quietly frustrated watching other tradies rush jobs",
-      "Has strong opinions on materials, methods, and shortcuts",
-      "Keeps a tidy van, organised tools, and a mental catalogue of every job",
-      "Would rather redo something than leave it at 90%",
-    ],
-    marketPerception:
-      "Clients who find you love you and never leave. But you're often invisible to new clients because you don't shout about your work. Word of mouth is your engine — but it's slow, and you're leaving money on the table every week.",
+    immediateValue: {
+      leanInto:
+        "Document your work obsessively. Every detail shot, every before-and-after, every close-up finish. Your quality is invisible to the market right now. Making it visible is the single highest-leverage thing you can do this week.",
+      holdingYouBack:
+        "You are almost certainly undercharging. Your pricing reflects what other tradies charge, not what your standard is worth. The gap between your quality and your rate is where you are losing money every single week.",
+      oneShift:
+        "Raise your rate on the next quote by 15 percent. Do not explain it. Do not apologise for it. See what happens. Most Precision Craftsmen are shocked to find clients do not even push back.",
+    },
+    reframe:
+      "You do not have a work problem. You have a positioning problem. Your quality is already there. The market just does not know it yet.",
+    gap: "The problem is, none of this is structured into how you present yourself. Clients who find you love you. But the clients who would pay your real rate cannot find you — because your brand does not communicate what you actually deliver.",
+    tension:
+      "You are better than your current positioning reflects. The gap between your standard and your visibility is costing you real money every month.",
+    positioningSnapshot: {
+      pursue: [
+        "Homeowners doing a forever home who want it done once, properly",
+        "Clients who have been burned by a cheap tradie and will not make that mistake again",
+        "Architects and designers who specify quality and refer premium tradies",
+        "Property owners who understand that value and price are different things",
+      ],
+      avoid: [
+        "Price shoppers who open with how cheap can you do it",
+        "Developers cutting costs on every line item",
+        "Clients who want it done yesterday — speed is the enemy of your standard",
+      ],
+      howToPresent:
+        "Lead with your portfolio. Let the work do the talking before you say a word about price. Show the detail, the finish, the precision. Then quote at the rate that reflects it.",
+    },
+    transition:
+      "You have got the identity. But you do not have the system to execute it. Your quality deserves a brand that matches it — one that attracts the right clients, communicates your standard before you open your mouth, and lets you charge what your work is actually worth.",
     playbook: {
       positioning: {
         howToDescribeYourself:
-          "I'm a [trade] who does the job once, properly. No shortcuts, no callbacks, no excuses. If you want it done right the first time — you call me.",
+          "I am a [trade] who does the job once, properly. No shortcuts, no callbacks, no excuses. If you want it done right the first time — you call me.",
         whatToBeKnownFor:
-          "The tradie who takes pride in every single job. The one clients show off to their mates. Quality that's still standing in 20 years.",
+          "The tradie who takes pride in every single job. The one clients show off to their mates. Quality that is still standing in 20 years.",
       },
       contentStrategy: {
         whatToPost: [
           "Close-up detail shots that show the craftsmanship — the joints, the finishes, the precision work most tradies skip",
           "Before and after transformations where the quality difference is obvious",
-          "Short explainers on why you do things a specific way — educate and demonstrate expertise at the same time",
+          "Short explainers on why you do things a specific way — educate and demonstrate expertise simultaneously",
         ],
         whatNotToPost: [
-          "Rushed jobs or anything that doesn't represent your best work — one bad post undoes ten good ones",
+          "Rushed jobs or anything that does not represent your best work — one bad post undoes ten good ones",
           "Price-focused content — it commoditises you and attracts the wrong clients",
           "Generic motivational quotes that have nothing to do with your trade",
         ],
         toneOfVoice:
-          "Confident, measured, and proud without being arrogant. You speak with authority about your trade. Short sentences. No fluff. Sounds like someone who's been doing this for 15 years and knows exactly what they're talking about.",
-        filmingStyle:
-          "Clean and deliberate. Good lighting. Close-up detail shots. Steady camera. Let the quality of the work be the star — not you talking to camera.",
+          "Confident, measured, and proud without being arrogant. You speak with authority about your trade. Short sentences. No fluff. Sounds like someone who has been doing this for 15 years and knows exactly what they are talking about.",
       },
       clientTargeting: {
         whoToAttract: [
           "Homeowners doing a forever home — not a quick flip",
-          "Clients who've been burned by a cheap tradie and won't make that mistake again",
+          "Clients who have been burned by a cheap tradie and will not make that mistake again",
           "Architects and designers who specify quality and refer premium tradies",
-          "Property owners who understand that value and price are different things",
         ],
         whoToAvoid: [
-          "Price shoppers who open with 'how cheap can you do it?'",
-          "Developers cutting costs on every line item — they will drain your energy and your margin",
-          "Clients who want it done yesterday — speed is the enemy of your standard",
+          "Price shoppers who open with how cheap can you do it",
+          "Developers cutting costs on every line item",
+          "Clients who want it done yesterday",
         ],
       },
       pricingStrategy: {
         tier: "premium",
         guidance:
-          "You should be in the top 20% of your market — and you're probably not there yet. Your quality justifies premium pricing, but you need to communicate that value before you quote. Lead with your portfolio, your process, and your testimonials. Stop discounting. The clients who push back on price aren't your clients.",
+          "You should be in the top 20 percent of your market — and you are probably not there yet. Your quality justifies premium pricing, but you need to communicate that value before you quote. Stop discounting. The clients who push back on price are not your clients.",
       },
       brandIdentity: {
         visualDirection:
-          "Clean, minimal, and confident. Dark tones, strong typography, high-quality photography. No clip art. No cheap logos. Your brand should look as precise as your work — because clients judge the book by the cover before they ever see the job.",
+          "Clean, minimal, and confident. Dark tones, strong typography, high-quality photography. No clip art. No cheap logos. Your brand should look as precise as your work.",
         languageStyle:
-          "Direct and authoritative. Short sentences. No corporate speak. Speak like a master of your trade, not a salesman. Use words like 'built', 'crafted', 'precise', 'right'.",
+          "Direct and authoritative. Short sentences. No corporate speak. Speak like a master of your trade, not a salesman.",
         colourPalette:
-          "Deep charcoal or near-black as the base, warm white for contrast, and a single strong accent — burnt orange, navy, or forest green. Avoid bright primary colours. Looks expensive.",
+          "Deep charcoal or near-black as the base, warm white for contrast, and a single strong accent — burnt orange, navy, or forest green. Looks expensive.",
       },
       growthStrategy: {
         howThisArchetypeScalesBest:
-          "The Craftsman scales by making the invisible visible. Your quality is already there — the problem is no one outside your existing clients knows about it. Start documenting your work obsessively. Build a portfolio that does the selling for you. Then niche down to the specific type of work you do exceptionally well, charge what it's actually worth, and build a team of tradies who share your standards.",
+          "The Precision Craftsman scales by making the invisible visible. Your quality is already there — the problem is no one outside your existing clients knows about it. Start documenting your work obsessively. Niche down to the specific type of work you do exceptionally well, charge what it is actually worth, and build a team who share your standards.",
         commonBlockers: [
-          "Refusing to delegate because 'no one does it like me' — this is the ceiling that keeps most Craftsmen small",
-          "Not charging enough for the quality delivered — you're subsidising clients who don't appreciate it",
+          "Refusing to delegate because no one does it like me — this is the ceiling that keeps most Precision Craftsmen small",
+          "Not charging enough for the quality delivered",
           "Invisible online — great work but no digital presence means no new clients",
-          "Taking on every job instead of specialising in what you do best",
         ],
       },
       actionThisWeek:
-        "Take 5 photos of your best recent work — close-up detail shots, not wide angles. Post one today with a single sentence about why you did it that way. That's your brand starting to work for you.",
+        "Take 5 photos of your best recent work — close-up detail shots, not wide angles. Post one today with a single sentence about why you did it that way. That is your brand starting to work for you.",
     },
   },
 
-  operator: {
-    id: "operator",
-    name: "The Operator",
-    tagline: "Systems. Scale. Results.",
+  SO: {
+    id: "SO",
+    name: "The Systems Operator",
+    tagline: "You run a business, not just a trade.",
     emoji: "⚙️",
-    identityDescription:
-      "You think like a business owner, not just a tradie. You're building something bigger than yourself — systems, processes, and efficiency are your language. You're not just doing jobs, you're running a machine. You measure everything and you're always looking for ways to do it better, faster, and more profitably. The work is the product. The business is the real project.",
-    strengths: [
-      "Strong business acumen — you know your numbers and they guide your decisions",
-      "Ability to scale through systems and delegation without quality dropping",
-      "Consistent output because your process is documented, not just in your head",
-      "Can run multiple crews and jobs simultaneously without chaos",
-      "Clients trust you with bigger, more complex projects",
+    identity:
+      "You are The Systems Operator. You think like a business owner, not just a tradie. You are building something bigger than yourself — systems, processes, and efficiency are your language. You are not just doing jobs, you are running a machine. You measure everything and you are always looking for ways to do it better, faster, and more profitably.",
+    universalTruths: [
+      "You have job management software and you actually use it — not just pay for it.",
+      "You track revenue, margins, and job costs regularly, not just at tax time.",
+      "You think in terms of processes and systems, not individual jobs.",
+      "You have asked how do we do this better next time after finishing a job.",
+      "You know what your business costs to run — and you price accordingly.",
     ],
-    weaknesses: [
-      "Can feel impersonal to clients — too corporate, not enough human",
-      "Staff turnover if culture and purpose aren't clearly defined",
-      "Over-systematising can kill the flexibility that wins good clients",
-      "Sometimes so focused on efficiency you miss the relationship that drives referrals",
-      "Seen as 'just another big company' by clients who want a personal touch",
+    mirrorStatements: [
+      "You are not just a tradie — you are running a commercial operation.",
+      "You delegate well and trust your team to execute.",
+      "You have documented processes that exist outside your head.",
+      "You think about the business five years from now, not just next week.",
+      "You know the difference between being busy and being profitable.",
     ],
-    defaultBehaviours: [
-      "Has job management software and actually uses it — not just pays for it",
-      "Tracks revenue, margins, and job costs weekly, not just at tax time",
-      "Delegates well and trusts the team to execute",
-      "Thinks in terms of processes and systems, not individual jobs",
-      "Always asking 'how do we do this better next time?' after every job",
-    ],
-    marketPerception:
-      "Seen as professional, reliable, and capable of handling volume. Clients trust you with bigger projects. But some clients worry you're too big to care about their job — and that's the gap you need to close.",
+    immediateValue: {
+      leanInto:
+        "Your systems are your competitive advantage. Make them visible. Show clients and potential hires what a professional, organised operation looks like. Most tradies are winging it — you are not, and that is worth communicating.",
+      holdingYouBack:
+        "Your brand probably looks like every other tradie in your market. The professionalism you have built internally is not reflected in how you present externally. Clients cannot see your systems — they can only see your brand.",
+      oneShift:
+        "Audit your client-facing touchpoints this week. Quote template, email signature, website, social media. Do they look as professional as your operation actually is? Close the gap between how you run and how you look.",
+    },
+    reframe:
+      "You do not have an operations problem. You have a perception problem. Your business runs well. The market just does not know it yet.",
+    gap: "The problem is, none of this is structured into how you present yourself. Your systems are real. Your professionalism is real. But your brand does not communicate it — and that is costing you the clients and the rates you deserve.",
+    tension:
+      "You are better than your current positioning reflects. You have built something genuinely professional. Now your brand needs to match it.",
+    positioningSnapshot: {
+      pursue: [
+        "Developers and builders who want a reliable, systemised trade partner",
+        "Property managers who need a tradie they can trust to run without hand-holding",
+        "Commercial clients who value consistency and clear communication above all else",
+      ],
+      avoid: [
+        "Clients who want a personal touch above all else — they will feel like a number",
+        "Jobs that fall outside your documented scope and break your systems",
+        "Clients who pay slowly or require excessive follow-up to settle invoices",
+      ],
+      howToPresent:
+        "Lead with your process. Show clients what working with you looks like from quote to completion. Professional documentation, clear communication, no surprises. That is your pitch.",
+    },
+    transition:
+      "You have got the identity. But you do not have the system to execute it. Your operation deserves a brand that matches it — one that communicates your professionalism before the first conversation, attracts the right clients, and positions you to charge what a properly run business is worth.",
     playbook: {
       positioning: {
         howToDescribeYourself:
-          "We're a [trade] company built on systems, not luck. You get consistent quality, clear communication, and a job that runs on time — every time. No surprises.",
+          "We are a [trade] company built on systems, not luck. You get consistent quality, clear communication, and a job that runs on time — every time. No surprises.",
         whatToBeKnownFor:
           "The tradie business that actually runs like a business. Professional, reliable, and capable of handling anything. The one builders and property managers call first.",
       },
@@ -187,536 +237,384 @@ export const ARCHETYPES: Record<ArchetypeId, Archetype> = {
         whatToPost: [
           "Behind-the-scenes of your systems — show how a job is managed from quote to completion",
           "Team culture content — the people behind the business build trust faster than any logo",
-          "Project case studies with real scope, timeline, and outcome — show you can handle complexity",
+          "Project case studies with real scope, timeline, and outcome",
         ],
         whatNotToPost: [
           "Anything that looks disorganised, reactive, or chaotic — it contradicts your entire brand",
-          "Content that makes you look like a one-man band — you're building a company, not a personal brand",
-          "Complaints about clients, suppliers, or other tradies — it's unprofessional and it sticks",
+          "Content that makes you look like a one-man band — you are building a company",
+          "Complaints about clients, suppliers, or other tradies",
         ],
         toneOfVoice:
           "Professional but not corporate. Confident and clear. You speak like a business leader who also knows the trade inside out. Decisive. No waffle.",
-        filmingStyle:
-          "Polished and structured. Drone shots for large projects. Team shots. Clean graphics and captions. Looks like a proper company — because it is.",
       },
       clientTargeting: {
         whoToAttract: [
-          "Commercial clients and project managers who need a reliable subcontractor",
-          "Developers and builders who can't afford a tradie who doesn't show up",
-          "Body corporates and facility managers with ongoing maintenance needs",
-          "Businesses that want a long-term trade partner, not a one-off",
+          "Developers and builders who want a reliable, systemised trade partner",
+          "Property managers who need a tradie they can trust",
+          "Commercial clients who value consistency and clear communication",
         ],
         whoToAvoid: [
-          "Clients who want to micromanage every step — they'll slow your system down",
-          "One-off residential jobs below your minimum job size",
-          "Anyone who doesn't understand why process and documentation matter",
+          "Clients who want a personal touch above all else",
+          "Jobs that fall outside your documented scope",
+          "Slow payers who require excessive follow-up",
         ],
       },
       pricingStrategy: {
         tier: "mid",
         guidance:
-          "Your edge is consistency and reliability at scale — price for that. Offer service agreements, maintenance contracts, and retainer arrangements. Price for the relationship, not the job. Your clients should be paying you before they even have a problem.",
+          "Your pricing should reflect the reliability and professionalism you deliver. You are not the cheapest and you should not be. Position your rate as the cost of certainty — no surprises, no drama, delivered as promised.",
       },
       brandIdentity: {
         visualDirection:
-          "Clean and corporate-lite. Strong logo, consistent colours across vehicles and uniforms. Looks like a proper company. Professional photography of the team and large-scale projects — not just finished work.",
+          "Clean, structured, and professional. Strong grid layouts, consistent typography, and a colour system that signals reliability. Think corporate without being cold.",
         languageStyle:
-          "Clear, confident, and process-oriented. Use words like 'system', 'reliable', 'consistent', 'on time'. Avoid overly casual language — but don't sound like a bank either.",
+          "Clear, direct, and confident. Process-oriented language. Words like delivered, managed, structured, reliable. No fluff, no hype.",
         colourPalette:
-          "Navy, white, and a strong accent — orange, red, or yellow. High contrast. Easy to read on vehicles and signage. Looks professional from 50 metres away.",
+          "Navy or dark slate as the base, clean white, and a single strong accent — electric blue, orange, or green. Signals trust and capability.",
       },
       growthStrategy: {
         howThisArchetypeScalesBest:
-          "The Operator scales by doubling down on systems and hiring well. Build your operations manual, create repeatable processes for every job type, and hire people who fit your culture. The goal is a business that runs without you on the tools every day — and eventually without you managing every job.",
+          "The Systems Operator scales by replicating the system. Document everything, hire to the process, and remove yourself from the day-to-day. The ceiling is always the owner — the goal is to build a business that runs without you.",
         commonBlockers: [
-          "Hiring the wrong people and not having a culture document to filter them out",
-          "Growing too fast before the systems are solid enough to support it",
-          "Not tracking margins per job type — some work is killing your profit and you don't know it",
-          "Underinvesting in marketing because 'we're busy enough' — busy isn't the same as profitable",
+          "Staying too involved in day-to-day operations instead of working on the business",
+          "Not communicating the professionalism externally — invisible brand, visible operation",
+          "Hiring for skill but not for cultural fit with the system",
         ],
       },
       actionThisWeek:
-        "Pick one recurring job type and write down the 5-step process for how it should run from first contact to invoice. That's the start of your operations manual — and the thing that lets you hire without chaos.",
+        "Pick one client-facing document — your quote template, your onboarding email, or your invoice — and make it look as professional as your operation actually is. One touchpoint at a time.",
     },
   },
 
-  hustler: {
-    id: "hustler",
-    name: "The Hustler",
-    tagline: "Fast. Hungry. Always moving.",
-    emoji: "⚡",
-    identityDescription:
-      "You're the tradie who never stops. Always on the phone, always quoting, always moving. Cash flow is king and you know how to keep it flowing. You're not precious about the work — you're about volume, speed, and keeping the machine running. You outwork everyone around you. The risk isn't your work ethic — it's that hustle without direction eventually hits a ceiling.",
-    strengths: [
-      "High energy and relentless work ethic that clients notice immediately",
-      "Strong sales ability — you can close a quote faster than most tradies can find their pen",
-      "Good cash flow because you're always moving and always billing",
-      "Adaptable and fast to respond — you answer the phone when others don't",
-      "Builds a large client base quickly through sheer volume of activity",
+  HT: {
+    id: "HT",
+    name: "The High-Ticket Specialist",
+    tagline: "You go deep, charge accordingly, and work with clients who value it.",
+    emoji: "💎",
+    identity:
+      "You are The High-Ticket Specialist. You have picked your lane and stayed in it. You know more about your niche than most people in the industry. Clients come to you specifically because no one else does what you do at the level you do it. You are not competing on price — you are competing on expertise. And when you are positioned correctly, you do not compete at all.",
+    universalTruths: [
+      "You have turned down work that did not meet your standard or your rate — and felt good about it.",
+      "You have clients who waited for you specifically rather than go with someone else.",
+      "You know things about your niche that most tradies in your field have never thought about.",
+      "You have been called expensive — and you were fine with it.",
+      "The clients who find you tend to refer others exactly like them.",
     ],
-    weaknesses: [
-      "Quality can slip when volume gets too high — and one bad job can undo ten good ones",
-      "Burnout risk is real — you're always on and you rarely switch off",
-      "Hard to build premium positioning when you're known for speed and availability",
-      "Everything runs through you — which means you're the bottleneck",
-      "Difficult to scale because the hustle is personal, not systematic",
+    mirrorStatements: [
+      "You are not expensive — you are priced correctly for what you actually deliver.",
+      "You have expertise that most clients cannot even articulate — but they can feel it.",
+      "You do not need volume. You need the right clients at the right rate.",
+      "Your niche is your moat. The deeper you go, the harder you are to replace.",
+      "You are the specialist clients want when they cannot afford to get it wrong.",
     ],
-    defaultBehaviours: [
-      "Answers the phone at 7am and 9pm — and doesn't think twice about it",
-      "Quotes fast — sometimes too fast, and the margin suffers",
-      "Always has three jobs running at once and somehow keeps them all moving",
-      "Knows every supplier rep by name and gets things done through relationships",
-      "Measures success by what landed in the account this week",
-    ],
-    marketPerception:
-      "Seen as responsive, available, and reliable in the short term. Clients like that you show up and get it done. But some start to wonder if you're cutting corners to keep the pace up — and that doubt is the thing that stops you charging more.",
+    immediateValue: {
+      leanInto:
+        "Your expertise is the asset. Make it visible. Write about what you know. Show the complexity of what you do. Most tradies hide their knowledge — you should be broadcasting it. The clients who will pay your rate are looking for proof of expertise before they call.",
+      holdingYouBack:
+        "You are the best kept secret in your market. The right clients are out there looking for exactly what you offer. They just cannot find you — because your brand does not communicate your depth of expertise clearly enough.",
+      oneShift:
+        "Write one piece of content this week that demonstrates your specialist knowledge. Not a photo of a job — an explanation of something complex that only someone at your level would know. That content will attract the clients who will pay your rate.",
+    },
+    reframe:
+      "You do not have a skills problem. You have a visibility problem. Your expertise is real. The market just does not know you exist yet.",
+    gap: "The problem is, none of this is structured into how you present yourself. Your depth of knowledge is not visible in your brand. Clients who find you are impressed — but most of the right clients never find you at all.",
+    tension:
+      "You are better than your current positioning reflects. You have built genuine expertise. Now your brand needs to communicate it at the level it deserves.",
+    positioningSnapshot: {
+      pursue: [
+        "High-net-worth clients with complex briefs and real budgets",
+        "Architects and designers who need a specialist they can trust completely",
+        "Clients who have already tried the generalist and want someone who actually knows",
+        "Commercial clients with specialised requirements that most tradies cannot handle",
+      ],
+      avoid: [
+        "Clients who want a generalist — they will not value your depth",
+        "Price-sensitive clients who will not pay for expertise",
+        "Jobs that fall outside your niche — they dilute your positioning",
+      ],
+      howToPresent:
+        "Lead with expertise. Before you talk about price, demonstrate knowledge. Show that you understand the complexity of what they are trying to achieve. That is what separates you from every other tradie in the room.",
+    },
+    transition:
+      "You have got the identity. But you do not have the system to execute it. Your expertise deserves a brand that communicates it clearly — one that attracts the right clients, positions you as the specialist they need, and lets you charge what genuine expertise is worth.",
     playbook: {
       positioning: {
         howToDescribeYourself:
-          "I get it done. Fast, fair, and no messing around. You call, I show up. You need it done — I do it. No waiting, no excuses.",
+          "I specialise in [specific niche]. I do not take every job — I take the jobs where my expertise makes a real difference to the outcome. If you want a generalist, I am not your person. If you want the best result on a complex job, call me.",
         whatToBeKnownFor:
-          "The tradie who actually answers the phone and shows up when they say they will. Fast turnaround, fair price, no drama. The one property managers call first.",
+          "The go-to specialist for [niche]. The tradie other tradies call when they are out of their depth. The one clients wait for because no one else does it the same way.",
       },
       contentStrategy: {
         whatToPost: [
-          "Same-day or next-day job completions — 'called at 8am, done by 2pm' is your brand in action",
-          "Availability posts — 'spots open this week in [suburb]' — this is direct response marketing that works",
-          "Fast turnaround testimonials from property managers and repeat clients",
+          "Deep-dive content that demonstrates your specialist knowledge — the complexity, the nuance, the things most tradies do not know",
+          "Case studies of complex projects where your expertise made the difference",
+          "Educational content that positions you as the authority in your niche",
         ],
         whatNotToPost: [
-          "Anything that makes you look unreliable, disorganised, or like you're cutting corners",
-          "Complaints about being too busy — it makes clients nervous about whether you'll show up",
-          "Jobs you're not proud of — volume doesn't mean posting everything",
+          "Generic content that makes you look like every other tradie — it destroys your specialist positioning",
+          "Price-focused content — it commoditises expertise",
+          "Volume content — you are not trying to reach everyone, you are trying to reach the right people",
         ],
         toneOfVoice:
-          "Fast, punchy, and direct. Short sentences. High energy. Sounds like a text message, not an essay. No fluff, no corporate speak, no waffle.",
-        filmingStyle:
-          "Raw and real. Phone footage is fine — it actually builds trust. Quick cuts. Show the pace and energy. Authenticity over polish every time.",
+          "Authoritative and specific. You speak with the confidence of someone who knows more about this than almost anyone. No hedging. No generic advice. Specific, expert, and direct.",
       },
       clientTargeting: {
         whoToAttract: [
-          "Property managers with urgent maintenance needs — they need someone who answers",
-          "Real estate agents needing pre-sale work done fast",
-          "Clients who've been let down by no-shows and want reliability above everything",
-          "Repeat residential clients who value fast response over lowest price",
+          "High-net-worth clients with complex briefs and real budgets",
+          "Architects and designers who need a specialist they can trust",
+          "Commercial clients with specialised requirements",
         ],
         whoToAvoid: [
-          "Clients who want the cheapest price — they'll drain your time and your margin",
-          "Large complex projects that need slow, careful execution — they'll expose your weaknesses",
-          "Clients who take 3 days to reply to a quote — they're not serious",
+          "Clients who want a generalist",
+          "Price-sensitive clients who will not pay for expertise",
+          "Jobs outside your niche",
+        ],
+      },
+      pricingStrategy: {
+        tier: "ultra-premium",
+        guidance:
+          "You should be charging significantly more than the market rate — because you are not competing with the market. You are the specialist. Price accordingly. Clients who baulk at your rate are not your clients. The ones who pay it will refer others who will also pay it.",
+      },
+      brandIdentity: {
+        visualDirection:
+          "Premium, refined, and specific. Your brand should signal expertise and exclusivity. Think high-end professional services — not tradie. Clean typography, considered photography, and a visual identity that says this person is the best at what they do.",
+        languageStyle:
+          "Expert and specific. Use the technical language of your niche — it signals knowledge to the right clients and filters out the wrong ones. Authoritative without being arrogant.",
+        colourPalette:
+          "Deep, rich tones — midnight navy, forest green, or charcoal — with gold, cream, or copper as an accent. Signals premium without shouting about it.",
+      },
+      growthStrategy: {
+        howThisArchetypeScalesBest:
+          "The High-Ticket Specialist scales by deepening the niche and raising the rate. More volume is not the answer — better clients at higher rates is. Build a reputation so strong in your niche that clients seek you out specifically, and the rate becomes a non-issue.",
+        commonBlockers: [
+          "Taking on work outside the niche to fill the calendar — it dilutes the positioning",
+          "Not charging enough for the expertise — underpricing specialist knowledge is the most expensive mistake",
+          "Invisible brand — expertise that is not communicated is expertise that does not exist in the market",
+        ],
+      },
+      actionThisWeek:
+        "Write down the three things you know about your niche that most tradies in your field do not. Then post one of them. That is the beginning of your specialist positioning.",
+    },
+  },
+
+  VC: {
+    id: "VC",
+    name: "The Volume Contractor",
+    tagline: "You move fast, win more, and build through scale.",
+    emoji: "🏗️",
+    identity:
+      "You are The Volume Contractor. You are built for scale. You move fast, you quote aggressively, and you keep the pipeline full. Where other tradies are waiting for the phone to ring, you are out there making it happen. You understand that volume creates opportunity — and you have the energy and the drive to capitalise on it.",
+    universalTruths: [
+      "You have had months where the revenue looked great and the profit looked average — and you know why.",
+      "You are rarely short of work. The challenge is making sure the work is worth doing.",
+      "You move faster than most tradies and you win more jobs because of it.",
+      "You have taken on jobs you probably should not have — and made it work anyway.",
+      "You know that slowing down is not the answer. Smarter systems are.",
+    ],
+    mirrorStatements: [
+      "Your energy and drive are genuine competitive advantages — most tradies do not have what you have.",
+      "You are not undisciplined — you are moving at a pace the market rewards.",
+      "The problem is not the volume. It is the margin on the volume.",
+      "You have built something real through sheer force of will. Now it needs a system.",
+      "You are one pricing and systems upgrade away from a genuinely profitable operation.",
+    ],
+    immediateValue: {
+      leanInto:
+        "Your ability to move fast and keep the pipeline full is rare. That is a genuine advantage. The goal is not to slow down — it is to make sure every job you win is worth winning. Set a minimum margin floor and do not quote below it.",
+      holdingYouBack:
+        "You are winning jobs at rates that do not reflect the cost of running your operation properly. The volume looks impressive. The profit does not always match it. The fix is not less work — it is better pricing on the work you take.",
+      oneShift:
+        "Calculate your actual cost per job this week — labour, materials, overhead, and your own time. Then look at your last five quotes and check whether you made real money on each one. That number will tell you everything you need to know.",
+    },
+    reframe:
+      "You do not have a work ethic problem. You have a margin problem. The hustle is real. The pricing just needs to match it.",
+    gap: "The problem is, none of this is structured into how you present yourself. You are winning work — but not always the right work at the right rate. Your brand needs to attract better clients so you can be selective about the volume you take on.",
+    tension:
+      "You are better than your current positioning reflects. You have built a real operation through hard work and drive. Now your brand needs to attract clients who will pay for it properly.",
+    positioningSnapshot: {
+      pursue: [
+        "Developers and builders who need a reliable contractor who can move at pace",
+        "Commercial clients with ongoing work who value consistency and speed",
+        "Clients with multiple projects who want one reliable trade partner",
+      ],
+      avoid: [
+        "One-off residential clients who require excessive hand-holding",
+        "Jobs with unclear scope that will blow out and kill your margin",
+        "Clients who pay slowly — at your volume, cash flow is everything",
+      ],
+      howToPresent:
+        "Lead with capacity and reliability. Show that you can handle volume, move fast, and deliver consistently. That is what the clients who will give you ongoing work need to see.",
+    },
+    transition:
+      "You have got the identity. But you do not have the system to execute it. Your drive deserves a brand that attracts better clients — ones who will pay your real rate, give you ongoing work, and let you build the operation you are capable of.",
+    playbook: {
+      positioning: {
+        howToDescribeYourself:
+          "We are a [trade] operation built for volume without sacrificing quality. Fast response, competitive pricing, and the capacity to handle whatever you throw at us. We keep the job moving.",
+        whatToBeKnownFor:
+          "The contractor who actually shows up, moves fast, and gets it done. Reliable at scale. The one builders call when they need someone who can handle the load.",
+      },
+      contentStrategy: {
+        whatToPost: [
+          "Volume and capacity content — show the scale of what you handle",
+          "Speed and reliability stories — the jobs you turned around fast without drama",
+          "Team and fleet content — signals that you are a real operation, not a one-man band",
+        ],
+        whatNotToPost: [
+          "Content that signals desperation for work — it attracts price shoppers",
+          "Complaints about slow clients or difficult jobs — it signals that you are hard to work with",
+          "Anything that makes you look disorganised — at your volume, chaos is the enemy",
+        ],
+        toneOfVoice:
+          "Direct, energetic, and confident. You are not the cheapest — you are the most reliable at scale. Speak like someone who has done this a thousand times and will do it a thousand more.",
+      },
+      clientTargeting: {
+        whoToAttract: [
+          "Developers and builders who need a reliable contractor at pace",
+          "Commercial clients with ongoing work",
+          "Clients with multiple projects who want one reliable trade partner",
+        ],
+        whoToAvoid: [
+          "One-off residential clients who require excessive hand-holding",
+          "Jobs with unclear scope",
+          "Slow payers",
         ],
       },
       pricingStrategy: {
         tier: "mid",
         guidance:
-          "You're not the cheapest and you shouldn't be. You're priced for speed and reliability — and those things have real value. Add a premium for urgent or same-day work. Stop racing to the bottom. Your responsiveness is worth money. Start charging for it.",
+          "Your pricing needs to reflect the true cost of running your operation at volume. Set a minimum margin floor and enforce it. The jobs that do not meet the floor are not worth taking — they drain your capacity for the ones that do.",
       },
       brandIdentity: {
         visualDirection:
-          "Bold and energetic. Strong colours, clear messaging. Looks like it was made to be seen on a phone screen at 7am. High contrast, easy to read fast, impossible to ignore.",
+          "Bold, confident, and professional. Strong logo, clear typography, and imagery that signals scale and capability. Think established contractor, not solo tradie.",
         languageStyle:
-          "Punchy and direct. Action words. 'Fast', 'now', 'today', 'done'. Sounds like a real person, not a company. Short. Sharp. No padding.",
+          "Direct and action-oriented. Words like delivered, completed, on time, at scale. No fluff. Sounds like someone who has done this many times before.",
         colourPalette:
-          "Bold primary colours — red, yellow, or bright blue. High energy. Easy to spot on a van or a phone screen.",
+          "Bold primary colours — strong red, deep blue, or industrial orange — with black and white. Signals confidence and capability at scale.",
       },
       growthStrategy: {
         howThisArchetypeScalesBest:
-          "The Hustler scales by hiring a second pair of hands before they need it — not after they're drowning. Then building a simple system to maintain quality at volume. Start tracking which job types make the most money per hour and do more of those. The goal is to move from doing everything yourself to running a small, fast team.",
+          "The Volume Contractor scales by improving margin, not just volume. The goal is the same number of jobs at a higher rate — or better jobs that require less management. Systems, pricing discipline, and client selectivity are the levers.",
         commonBlockers: [
-          "Doing everything yourself and hitting a hard ceiling — you can only move so fast",
-          "Not tracking which jobs are actually profitable — busy doesn't mean making money",
-          "Reputation for speed over quality starting to catch up — one bad review can undo months of hustle",
-          "No systems — everything lives in your head, which means it can't run without you",
+          "Winning jobs at rates that do not cover the real cost of the operation",
+          "Taking on every job instead of being selective about which volume is worth having",
+          "No minimum margin floor — every job is priced reactively instead of strategically",
         ],
       },
       actionThisWeek:
-        "Track every job you do this week and write down the hours spent vs what you charged. Find the one job type that pays best per hour — and make that your focus for the next month.",
+        "Set a minimum margin floor for your business this week. Write it down. Apply it to the next quote you send. If the job does not meet the floor, do not take it.",
     },
   },
 
-  specialist: {
-    id: "specialist",
-    name: "The Specialist",
-    tagline: "The best in the game at one thing.",
-    emoji: "🎯",
-    identityDescription:
-      "You've gone deep, not wide. You've chosen a niche and you own it. You're the go-to person for a specific type of work — and clients pay premium because they know you're the expert. You don't do everything. You do one thing better than anyone else. And that focus is worth more than most tradies realise.",
-    strengths: [
-      "Premium pricing power through genuine expertise — you're not competing on price",
-      "Strong reputation in a specific niche that's hard to replicate",
-      "Referrals from other tradies who don't do your niche — they send you their best clients",
-      "Deep knowledge that builds instant client confidence — they feel safe immediately",
-      "Less competition — you're in a category of one, not a race to the bottom",
+  RB: {
+    id: "RB",
+    name: "The Reputation Builder",
+    tagline: "Your name is your marketing. Trust is your edge.",
+    emoji: "🏆",
+    identity:
+      "You are The Reputation Builder. Your name carries weight in your market. You have built trust over time — through consistent delivery, honest communication, and showing up when you said you would. Clients do not just hire you for the job. They hire you because they trust you. And that trust is worth more than any marketing campaign you could run.",
+    universalTruths: [
+      "Most of your work comes from people who have worked with you before or been referred by someone who has.",
+      "You have never needed to advertise heavily — your reputation does the work.",
+      "You have turned down work that would have damaged your name — and it was the right call.",
+      "Clients call you back for every job because they know what they are getting.",
+      "You have a long list of clients who would recommend you without hesitation.",
     ],
-    weaknesses: [
-      "Vulnerable if the niche dries up, changes, or gets commoditised",
-      "Smaller market — can be hard to fill the calendar without marketing",
-      "Hard to explain what you do to people outside the niche — you need to educate before you sell",
-      "Risk of being too narrow if the market shifts and you haven't built adjacent skills",
-      "Can be perceived as expensive by clients who don't understand the value of specialisation",
+    mirrorStatements: [
+      "Your reputation is a genuine business asset — one that took years to build and cannot be copied.",
+      "Trust is your competitive advantage. Most tradies cannot buy what you have already earned.",
+      "You do not need to sell yourself — you need to make yourself findable.",
+      "The clients who know you love you. The problem is the ones who do not know you yet.",
+      "Your word means something. That is rarer than you think.",
     ],
-    defaultBehaviours: [
-      "Turns down work outside their specialty without hesitation — and feels good about it",
-      "Knows more about their niche than most people in the entire industry",
-      "Gets called in by other tradies to handle the hard stuff they can't do",
-      "Charges more than generalists — and gets it, because clients feel the expertise",
-      "Constantly upskilling and staying ahead of the niche — this is never finished",
-    ],
-    marketPerception:
-      "Seen as the expert. Clients feel confident because they know they're getting the best person for the job. Referred by other tradies. Premium positioning is natural — but only if people know you exist.",
-    playbook: {
-      positioning: {
-        howToDescribeYourself:
-          "I'm [name], and I specialise exclusively in [niche]. If you need [specific outcome], I'm the person you call. I don't do everything — I do this better than anyone in [area].",
-        whatToBeKnownFor:
-          "The undisputed expert in [niche]. The tradie other tradies call when they're out of their depth. Premium, precise, and worth every dollar.",
-      },
-      contentStrategy: {
-        whatToPost: [
-          "Deep-dive educational content about your niche — teach what others don't know and you become the obvious expert",
-          "Complex problem-solving content — show the hard stuff you handle that generalists can't",
-          "Case studies of unusual or challenging jobs that demonstrate your depth",
-        ],
-        whatNotToPost: [
-          "General trade content outside your niche — it dilutes your positioning immediately",
-          "Price-focused content — specialists don't compete on price, they compete on expertise",
-          "Anything that makes you look like a generalist — it's the one thing that kills specialist positioning",
-        ],
-        toneOfVoice:
-          "Authoritative and educational. You speak like the expert you are. Confident, not arrogant. You teach without talking down. Clients should feel smarter after reading your content.",
-        filmingStyle:
-          "Educational and detailed. Close-up technical shots, process walkthroughs, explainer-style content. Looks like a masterclass, not a sales pitch.",
-      },
-      clientTargeting: {
-        whoToAttract: [
-          "Clients with specific, complex problems in your niche who've been told 'no one can do this'",
-          "Other tradies who need a specialist subcontractor — they become your best referral source",
-          "Architects and engineers who specify specialist work and have premium clients",
-          "Premium residential and commercial clients who understand why expertise costs more",
-        ],
-        whoToAvoid: [
-          "Clients wanting a generalist at specialist prices — they'll never be happy",
-          "Anyone who doesn't understand why you charge more — educating them is a full-time job",
-          "Clients who want you to do work outside your specialty — it's a trap",
-        ],
-      },
-      pricingStrategy: {
-        tier: "premium",
-        guidance:
-          "You should be the most expensive option in your niche — and proud of it. Your expertise eliminates risk for clients. Price for the outcome, not the hours. Consider retainer arrangements with builders and other tradies who regularly need your specialty — that's recurring revenue without the quoting cycle.",
-      },
-      brandIdentity: {
-        visualDirection:
-          "Precise and technical. Clean design with a focus on your niche. Looks like a specialist, not a generalist. Photography that shows the complexity and quality of your specific work — not generic trade shots.",
-        languageStyle:
-          "Technical and authoritative. Use industry-specific language that signals expertise. Educate without overwhelming. Speak to clients who already know they need a specialist.",
-        colourPalette:
-          "Deep, sophisticated tones. Midnight blue, slate grey, or forest green. Signals expertise and premium positioning. Avoid anything that looks cheap or generic.",
-      },
-      growthStrategy: {
-        howThisArchetypeScalesBest:
-          "The Specialist scales by becoming the most recognised name in their niche — online and in the industry. Build a referral network with complementary tradies, create educational content that attracts clients searching for your specialty, and consider training others in your niche as a revenue stream.",
-        commonBlockers: [
-          "Not marketing the specialty clearly enough — people don't know you exist, and that's the whole problem",
-          "Undercharging because 'no one else charges that much' — you're the expert, act like it",
-          "Taking on general work to fill gaps instead of doubling down on the niche",
-          "Niche is too narrow — needs adjacent specialties to grow without abandoning the positioning",
-        ],
-      },
-      actionThisWeek:
-        "Write one sentence that describes exactly what you specialise in and who you do it for. Post it on your Google Business Profile today. That's your positioning statement — and it starts working the moment it's live.",
+    immediateValue: {
+      leanInto:
+        "Your reputation is real and it is valuable. The goal now is to make it visible beyond your existing network. Every client who loves you is a potential referral engine — but only if you make it easy for them to refer you. Ask for reviews. Ask for referrals. Make it a process, not an afterthought.",
+      holdingYouBack:
+        "Your reputation is local and personal — which means it does not scale without a system. You are dependent on word of mouth in a finite network. When that network slows down, so does your pipeline. You need to make your reputation visible to people who do not already know you.",
+      oneShift:
+        "Contact your three best clients this week and ask them directly: is there anyone you know who could use what I do? That one conversation, done consistently, will generate more work than any ad you could run.",
     },
-  },
-
-  leader: {
-    id: "leader",
-    name: "The Leader",
-    tagline: "Building something bigger than the tools.",
-    emoji: "🦁",
-    identityDescription:
-      "You're not just a tradie — you're building a brand and a team. You think about culture, reputation, and legacy. You want to be known, respected, and followed. You're the one other tradies look up to. You're building something that lasts beyond you — and you feel it every time you walk onto a job site.",
-    strengths: [
-      "Natural authority and ability to attract talented people who want to be part of something",
-      "Strong brand presence that generates leads without cold outreach",
-      "Ability to inspire and lead a team through culture, not just management",
-      "Thinks long-term about reputation and legacy — not just this month's cash flow",
-      "Can attract premium clients through brand alone — they come to you",
-    ],
-    weaknesses: [
-      "Can get caught up in the brand and lose focus on the profitability that funds it",
-      "Team management is demanding and emotionally taxing — people problems are constant",
-      "High expectations can be hard to maintain at scale when you're not on every job",
-      "Risk of ego getting in the way of good hiring and good decisions",
-      "Brand-building takes time — it's slow to monetise and easy to get impatient",
-    ],
-    defaultBehaviours: [
-      "Shows up at industry events and is known in the community — people know the name",
-      "Mentors younger tradies and genuinely enjoys it",
-      "Has a strong opinion on the direction of the industry and isn't afraid to share it",
-      "Invests in team culture and development — not just tools and equipment",
-      "Thinks about what they want to be remembered for, not just what they're billing this week",
-    ],
-    marketPerception:
-      "Respected and well-known. Clients feel proud to work with you. Other tradies want to work for you. You're seen as a leader in the industry — not just a service provider. That's rare, and it's worth protecting.",
-    playbook: {
-      positioning: {
-        howToDescribeYourself:
-          "We're [business name] — a [trade] company built on culture, quality, and reputation. We're not just doing jobs. We're building a standard for the industry.",
-        whatToBeKnownFor:
-          "The tradie brand that sets the standard. The one clients brag about hiring. The business that other tradies respect and want to join.",
-      },
-      contentStrategy: {
-        whatToPost: [
-          "Leadership and culture content — show what you stand for and why your team chooses to work with you",
-          "Industry commentary and opinion pieces — you have a point of view, use it",
-          "Brand story content — why you built this business and what you're building toward",
-        ],
-        whatNotToPost: [
-          "Content that undermines your authority or brand — one inconsistent post can confuse the narrative",
-          "Complaints or negativity about the industry — leaders lift the industry, they don't drag it",
-          "Anything that looks cheap or inconsistent with your brand — you've built something, protect it",
-        ],
-        toneOfVoice:
-          "Authoritative and inspiring. You speak with conviction. You have a point of view on the industry. Direct, but with depth. You lead, you don't just inform.",
-        filmingStyle:
-          "High production value. Cinematic where possible. Shows the scale and culture of your business. Interviews with team members. Brand story videos. Looks like a proper company with a soul.",
-      },
-      clientTargeting: {
-        whoToAttract: [
-          "Premium residential clients who want the best and are willing to pay for it",
-          "Commercial clients who value brand and reputation over lowest price",
-          "Developers who want a reliable, reputable partner for multiple projects",
-          "Clients who've heard about you through reputation and sought you out specifically",
-        ],
-        whoToAvoid: [
-          "Clients who don't respect your brand or treat your team poorly",
-          "Price-driven clients who don't value reputation — they'll never appreciate what you've built",
-          "Anyone who tries to micromanage — they don't trust you, and that relationship won't work",
-        ],
-      },
-      pricingStrategy: {
-        tier: "premium",
-        guidance:
-          "You should command premium pricing based on brand and reputation alone. Your clients aren't just paying for the work — they're paying for the experience, the team, and the brand. Price confidently and don't apologise for it. The right clients won't flinch.",
-      },
-      brandIdentity: {
-        visualDirection:
-          "Premium and distinctive. Strong brand identity across everything — vehicles, uniforms, website, social. Looks like a company with a clear identity and values. Photography that shows the team and the culture, not just the finished work.",
-        languageStyle:
-          "Authoritative and values-driven. Speaks to culture, standards, and legacy. Uses 'we' not 'I'. Sounds like a brand, not an individual. Every word reinforces what you stand for.",
-        colourPalette:
-          "Strong, distinctive brand colours that are consistent across everything. Bold (black and gold) or refined (navy and cream). The palette should be ownable and recognisable from across a job site.",
-      },
-      growthStrategy: {
-        howThisArchetypeScalesBest:
-          "The Leader scales by building a brand that attracts both clients and talent. Invest in culture, document your values, and build a team that embodies what you stand for. The goal is a business where the brand is bigger than any individual — including you.",
-        commonBlockers: [
-          "Ego getting in the way of good hiring decisions — the best leaders hire people better than them",
-          "Brand-building without enough focus on profitability — a beautiful brand that loses money isn't a business",
-          "Not delegating enough — still trying to be on the tools when you should be building the company",
-          "Culture breaking down as the team grows — it needs active maintenance, not just good intentions",
-        ],
-      },
-      actionThisWeek:
-        "Write down the 3 things your business stands for — not what you do, but what you believe. Post one of them this week with a real story that proves it. That's your brand in action.",
+    reframe:
+      "You do not have a trust problem. You have a reach problem. Your reputation is real. It just needs to travel further than your existing network.",
+    gap: "The problem is, none of this is structured into how you present yourself. Your reputation is built on relationships — but relationships do not scale without a system. Your brand needs to communicate your trustworthiness to people who have never met you.",
+    tension:
+      "You are better than your current positioning reflects. You have earned something genuinely valuable. Now your brand needs to communicate it to the people who have not experienced it yet.",
+    positioningSnapshot: {
+      pursue: [
+        "Clients who value long-term relationships over the cheapest price",
+        "Referrals from existing clients — they are pre-sold on your reputation",
+        "Local community and network connections who already know your name",
+        "Clients who have been burned before and want someone they can trust",
+      ],
+      avoid: [
+        "One-off price shoppers who will not become repeat clients",
+        "Clients who do not value the relationship — they will not refer you",
+        "Jobs that would compromise your reputation for a short-term gain",
+      ],
+      howToPresent:
+        "Lead with trust signals. Reviews, testimonials, years in business, repeat clients. Show that other people trust you — because that is the fastest way to earn trust from someone who does not know you yet.",
     },
-  },
-
-  guardian: {
-    id: "guardian",
-    name: "The Guardian",
-    tagline: "Trusted. Reliable. Always there.",
-    emoji: "🛡️",
-    identityDescription:
-      "You're the tradie clients call for everything. You've been looking after the same families and businesses for years. Loyalty is your currency. You're not flashy, you're not the cheapest, and you're not trying to take over the world. You're the one they trust — and that trust is worth more than any marketing campaign. The problem is, not enough new people know you exist.",
-    strengths: [
-      "Exceptional client retention — your clients don't leave, and they send everyone they know",
-      "Strong word-of-mouth referral network built over years of showing up",
-      "Deep understanding of long-term client needs — you know their house better than they do",
-      "Consistent and dependable — you never let people down, and that's rarer than it sounds",
-      "Trusted advisor status with key clients — they call you before they call anyone else",
-    ],
-    weaknesses: [
-      "Hard to grow beyond the existing client base — you're the best-kept secret in your area",
-      "Can be taken for granted by long-term clients who expect the same price forever",
-      "Reluctant to raise prices with loyal clients — and you've been undercharging for years",
-      "Slow to adopt new technology or methods — it works, so why change it?",
-      "Invisible to new clients — no online presence means no new pipeline",
-    ],
-    defaultBehaviours: [
-      "Remembers clients' names, their kids' names, and what they had done last time",
-      "Shows up on time, every time — and calls ahead if anything changes",
-      "Does small favours that aren't on the invoice — and clients remember it for years",
-      "Has clients who've been with them for 10+ years and wouldn't call anyone else",
-      "Gets genuinely uncomfortable with pushy sales tactics — it's not who they are",
-    ],
-    marketPerception:
-      "Beloved by existing clients. Invisible to new ones. You're the best-kept secret in your area — which is both your greatest strength and your biggest growth problem.",
+    transition:
+      "You have got the identity. But you do not have the system to execute it. Your reputation deserves a brand that communicates it beyond your existing network — one that makes your trustworthiness visible to the clients who have not met you yet.",
     playbook: {
       positioning: {
         howToDescribeYourself:
-          "I'm the [trade] that [suburb] families and businesses have trusted for [X] years. I'm not the cheapest. I'm the one you call when you need it done right and you need someone you can trust completely.",
+          "I have been doing this for [X] years and most of my work comes from people who have worked with me before or been referred by someone who has. That is not an accident. I do what I say I will do, when I say I will do it.",
         whatToBeKnownFor:
-          "The tradie your neighbours recommend without hesitation. The one who's been looking after the community for years. Trusted, reliable, and always there when you need them.",
+          "The tradie you can trust. The one who shows up, does the job, and does not create problems. The one clients call back every time — and tell their friends about.",
       },
       contentStrategy: {
         whatToPost: [
-          "Long-term client stories — with permission, these are your most powerful content because they prove loyalty over time",
-          "Community and local area content — show you're part of the area, not just working in it",
-          "Seasonal maintenance tips and reminders — this positions you as the trusted advisor, not just a service",
+          "Client testimonials and reviews — social proof is your most powerful content",
+          "Repeat client stories — show that people come back to you",
+          "Behind-the-scenes of how you communicate and manage jobs — demonstrate the trustworthiness, do not just claim it",
         ],
         whatNotToPost: [
-          "Anything that feels inauthentic or salesy — your clients trust you because you're real, don't ruin it",
-          "Overly polished content that loses your genuine feel — authenticity is your brand",
-          "Anything that makes you look like a big corporate — that's the opposite of what you stand for",
+          "Anything that contradicts the trust positioning — complaints, drama, or unprofessional content",
+          "Content that looks like you are desperate for work — it signals the opposite of trust",
+          "Generic content that does not reinforce your reputation",
         ],
         toneOfVoice:
-          "Warm, genuine, and personal. Sounds like a neighbour, not a company. Honest and straightforward. The kind of person you'd trust with your house keys — because clients literally do.",
-        filmingStyle:
-          "Authentic and real. Natural lighting. Conversational to camera. Feels like a real person, not a production. Local and community-focused.",
+          "Warm, honest, and grounded. You speak like someone who has been around long enough to know what matters. No hype. No selling. Just straight talk from someone who has earned the right to be direct.",
       },
       clientTargeting: {
         whoToAttract: [
-          "Long-term homeowners in your local area who want a tradie relationship, not a transaction",
-          "Families who want someone they can trust completely — not just the cheapest quote",
-          "Small businesses needing reliable ongoing maintenance from someone who knows the property",
-          "Clients who've been burned by unreliable tradies and want the opposite",
+          "Clients who value long-term relationships",
+          "Referrals from existing clients",
+          "Clients who have been burned before and want someone they can trust",
         ],
         whoToAvoid: [
-          "Clients who are just looking for the cheapest quote — they'll never value what you offer",
-          "One-off clients with no potential for ongoing relationship — they're not your people",
-          "Anyone who doesn't value the relationship — they'll drain your energy and your loyalty",
+          "One-off price shoppers",
+          "Clients who do not value the relationship",
+          "Jobs that would compromise your reputation",
         ],
       },
       pricingStrategy: {
         tier: "mid",
         guidance:
-          "You're undercharging your loyal clients and you know it. It's time to raise your rates — slowly and with honest communication. Your long-term clients will understand because they trust you. New clients should be paying your full rate from day one. Your reliability and trustworthiness are worth a premium — start charging for them.",
+          "Your pricing should reflect the value of certainty — clients pay you because they know what they are getting. That is worth a premium over the unknown. Do not discount. The clients who push back on price are not your clients.",
       },
       brandIdentity: {
         visualDirection:
-          "Warm and approachable. Local feel. Family-friendly. Photos of real work in real homes — not staged shoots. Looks like a person, not a corporation. Consistent but never corporate.",
+          "Trustworthy, established, and personal. Think local institution — not corporate. Strong logo, consistent colours, and imagery that shows real people and real work. Looks like someone who has been around and will still be around.",
         languageStyle:
-          "Personal and warm. First person. Conversational. Uses 'I' naturally. Sounds like a real person who genuinely cares — because you do.",
+          "Honest, direct, and warm. Words like trusted, reliable, local, established. Sounds like a real person, not a marketing department.",
         colourPalette:
-          "Warm, approachable tones. Earthy greens, warm blues, or classic navy and white. Feels trustworthy and local. Nothing that looks cold or corporate.",
+          "Warm, grounded tones — deep green, navy, or burgundy — with cream or warm white. Signals stability and trustworthiness. Looks like it has been around for a reason.",
       },
       growthStrategy: {
         howThisArchetypeScalesBest:
-          "The Guardian scales by turning loyal clients into active referrers and building a local reputation that attracts new clients organically. Ask for Google reviews, create a simple referral program, and start showing up online so new clients can find you. Your reputation is your biggest asset — it's time to start using it.",
+          "The Reputation Builder scales by systematising the referral engine. Every satisfied client is a potential referral source — but only if you make it easy and ask consistently. Build a review and referral process, make your reputation visible online, and let trust do the work at scale.",
         commonBlockers: [
-          "Not asking for reviews or referrals from loyal clients — they'd happily do it, you just never ask",
-          "Invisible online — no website, no Google Business Profile, no way for new clients to find you",
-          "Undercharging long-term clients out of loyalty — it's costing you thousands every year",
-          "Relying entirely on word of mouth with no active marketing — it works until it doesn't",
+          "Relying entirely on word of mouth in a finite network — it does not scale without a system",
+          "Not asking for reviews or referrals — the reputation is real but invisible online",
+          "Not charging enough — trust is worth a premium and most Reputation Builders undercharge for it",
         ],
       },
       actionThisWeek:
-        "Text your 3 best long-term clients today and ask them to leave you a Google review. Give them the direct link. That's the fastest thing you can do to start showing up for new clients who don't know you yet.",
-    },
-  },
-
-  maverick: {
-    id: "maverick",
-    name: "The Maverick",
-    tagline: "Different by design.",
-    emoji: "🔥",
-    identityDescription:
-      "You do things your way. You've never followed the crowd and you're not about to start. You've got a strong personality, a unique approach, and clients either love you or they're not your people. You're not trying to appeal to everyone — you're building something distinctive and you're proud of it. The risk isn't your boldness — it's making sure the business behind the brand is as solid as the personality.",
-    strengths: [
-      "Highly distinctive brand that stands out in a sea of identical tradie businesses",
-      "Strong personal brand and loyal following that generates leads through attraction",
-      "Attracts clients who specifically want your style — they're pre-sold before they call",
-      "Not competing on price — competing on personality and distinctiveness",
-      "High energy and creativity that drives innovation and keeps the work interesting",
-    ],
-    weaknesses: [
-      "Can alienate potential clients with a strong personality — but that's also the point",
-      "Inconsistency if the personal brand isn't actively managed and protected",
-      "Hard to scale because the brand is tied to you personally — you're the product",
-      "Can be unpredictable — hard for clients to know what to expect if you're not consistent",
-      "Risk of burning bridges in a small industry where everyone knows everyone",
-    ],
-    defaultBehaviours: [
-      "Does things differently just because they can — and it usually works",
-      "Has strong opinions and isn't afraid to share them publicly",
-      "Builds a following, not just a client list — people come back for the personality",
-      "Pushes back on clients who want to compromise the vision — and clients respect it",
-      "Constantly experimenting with new approaches, new content, new ways of doing things",
-    ],
-    marketPerception:
-      "Polarising — but in a good way. The clients who get you are fiercely loyal. The ones who don't aren't your clients anyway. You're memorable, distinctive, and impossible to ignore. That's the whole point.",
-    playbook: {
-      positioning: {
-        howToDescribeYourself:
-          "I'm [name] and I do [trade] differently. If you want the same as everyone else, I'm not your tradie. If you want something that actually stands out — call me.",
-        whatToBeKnownFor:
-          "The tradie with a point of view. The one who does it differently and isn't apologetic about it. Distinctive, bold, and impossible to forget.",
-      },
-      contentStrategy: {
-        whatToPost: [
-          "Strong opinions about the industry — the takes that start conversations and build a following",
-          "Behind-the-scenes of your unique approach — show why you do it differently",
-          "Work that looks different from everyone else — your aesthetic is your brand",
-        ],
-        whatNotToPost: [
-          "Generic content that looks like everyone else — it's the one thing that kills your positioning",
-          "Safe, bland, corporate-style posts — they're the opposite of everything you stand for",
-          "Content that tries to appeal to everyone — you're not for everyone, and that's the strength",
-        ],
-        toneOfVoice:
-          "Bold, opinionated, and unapologetic. You have a point of view and you share it. Entertaining and engaging. Sounds like no one else in the industry — because you're not like anyone else.",
-        filmingStyle:
-          "Creative and distinctive. Doesn't look like a typical tradie video. Could be cinematic, could be raw — but it's always intentional and always unmistakably you.",
-      },
-      clientTargeting: {
-        whoToAttract: [
-          "Clients who specifically want your style and approach — they've done their research and chosen you",
-          "Design-conscious clients who value creativity and want something that stands out",
-          "Clients who've seen your work and sought you out — they're already sold",
-          "People who become fans and advocates — they don't just hire you, they tell everyone",
-        ],
-        whoToAvoid: [
-          "Clients who want you to do it 'like everyone else' — they'll never be happy with you",
-          "Conservative clients who don't appreciate your style — they'll try to change you",
-          "Anyone who tries to water down your approach — it's not worth it",
-        ],
-      },
-      pricingStrategy: {
-        tier: "premium",
-        guidance:
-          "Your distinctiveness is your premium. Clients who seek you out specifically are willing to pay more — because they can't get what you offer anywhere else. Don't discount to win work. If they're not willing to pay your rate, they're not your client. Your brand is the product as much as the work.",
-      },
-      brandIdentity: {
-        visualDirection:
-          "Bold and distinctive. Looks like nothing else in the industry. Strong visual identity that reflects your personality. Could be dark and edgy, bright and bold, or artistic and refined — but it's always unmistakably you.",
-        languageStyle:
-          "Distinctive and personal. Sounds like you, not a brand guide. Has a clear voice and point of view. Memorable and quotable. People should be able to tell it's you without seeing your name.",
-        colourPalette:
-          "Whatever fits your personality — but commit to it fully and consistently. Could be all black, could be bright and bold. The key is that it's ownable and instantly recognisable.",
-      },
-      growthStrategy: {
-        howThisArchetypeScalesBest:
-          "The Maverick scales by building a personal brand so strong that the business grows through attraction, not outreach. Focus on content that builds a following, not just a client list. The challenge is systematising the work so the brand can grow beyond just you on the tools — because right now, you are the product.",
-        commonBlockers: [
-          "Brand too tied to personal identity — hard to scale because you can't clone yourself",
-          "Inconsistency in content or approach undermining the brand — one off-brand post can confuse the narrative",
-          "Not converting the following into actual paying clients — a big audience means nothing if it doesn't pay",
-          "Burning out from the constant content and personality demands — the brand needs fuel, and that fuel is you",
-        ],
-      },
-      actionThisWeek:
-        "Post one genuine opinion about your industry this week — something you actually believe that most tradies wouldn't say publicly. That's the content that builds a following. Don't overthink it. Just say it.",
+        "Ask your three best clients for a Google review this week. Send them a direct link. That is the fastest way to make your reputation visible to people who do not already know you.",
     },
   },
 };
-
-export const ARCHETYPE_ORDER: ArchetypeId[] = [
-  "craftsman",
-  "operator",
-  "hustler",
-  "specialist",
-  "leader",
-  "guardian",
-  "maverick",
-];

@@ -6,44 +6,38 @@ describe("calculateScores", () => {
   it("returns all archetypes with zero scores for empty answers", () => {
     const result = calculateScores({});
     expect(result.primaryArchetype).toBeDefined();
-    expect(result.scores.craftsman).toBe(0);
-    expect(result.scores.operator).toBe(0);
-    expect(result.scores.hustler).toBe(0);
-    expect(result.scores.specialist).toBe(0);
-    expect(result.scores.leader).toBe(0);
-    expect(result.scores.guardian).toBe(0);
-    expect(result.scores.maverick).toBe(0);
+    expect(result.scores.PC).toBe(0);
+    expect(result.scores.SO).toBe(0);
+    expect(result.scores.HT).toBe(0);
+    expect(result.scores.VC).toBe(0);
+    expect(result.scores.RB).toBe(0);
   });
 
-  it("accumulates weights correctly for craftsman-aligned answers", () => {
-    // q1a → craftsman: 3, specialist: 2
-    // q2a → craftsman: 3, specialist: 2
-    const answers = { q1: "q1a", q2: "q2a" };
+  it("accumulates +1 weights correctly for PC-aligned answers", () => {
+    // q1a → PC: 1, q2a → PC: 1, q3a → PC: 1
+    const answers = { q1: "q1a", q2: "q2a", q3: "q3a" };
     const result = calculateScores(answers);
-    expect(result.scores.craftsman).toBe(6);
-    expect(result.scores.specialist).toBe(4);
-    expect(result.primaryArchetype).toBe("craftsman");
+    expect(result.scores.PC).toBe(3);
+    expect(result.primaryArchetype).toBe("PC");
   });
 
-  it("accumulates weights correctly for operator-aligned answers", () => {
-    // q6a → operator: 3, specialist: 1
-    // q12a → operator: 3, specialist: 1
-    const answers = { q6: "q6a", q12: "q12a" };
+  it("accumulates +1 weights correctly for SO-aligned answers", () => {
+    // q1b → SO: 1, q2b → SO: 1, q3b → SO: 1
+    const answers = { q1: "q1b", q2: "q2b", q3: "q3b" };
     const result = calculateScores(answers);
-    expect(result.scores.operator).toBe(6);
-    expect(result.scores.specialist).toBe(2);
-    expect(result.primaryArchetype).toBe("operator");
+    expect(result.scores.SO).toBe(3);
+    expect(result.primaryArchetype).toBe("SO");
   });
 
-  it("accumulates weights correctly for hustler-aligned answers", () => {
-    // q2c → hustler: 3, guardian: 1
-    const answers = { q2: "q2c" };
+  it("accumulates +1 weights correctly for HT-aligned answers", () => {
+    // q1c → HT: 1, q2c → HT: 1, q3c → HT: 1
+    const answers = { q1: "q1c", q2: "q2c", q3: "q3c" };
     const result = calculateScores(answers);
-    expect(result.scores.hustler).toBe(3);
-    expect(result.primaryArchetype).toBe("hustler");
+    expect(result.scores.HT).toBe(3);
+    expect(result.primaryArchetype).toBe("HT");
   });
 
-  it("percentages sum to 100", () => {
+  it("percentages sum to ~100", () => {
     const answers: Record<string, string> = {};
     QUIZ_QUESTIONS.forEach((q) => {
       answers[q.id] = q.options[0].id;
@@ -56,47 +50,49 @@ describe("calculateScores", () => {
   });
 
   it("does not assign secondary archetype when scores are far apart", () => {
-    // Give craftsman a dominant score
+    // Give HT a dominant score across all 20 questions
     const answers: Record<string, string> = {};
     QUIZ_QUESTIONS.forEach((q) => {
-      // Always pick the first option (varies by question but creates some spread)
-      answers[q.id] = q.options[0].id;
+      // Pick option c (HT) for all questions
+      const htOption = q.options.find((o) => o.scores.HT === 1);
+      if (htOption) answers[q.id] = htOption.id;
     });
     const result = calculateScores(answers);
-    // Just verify the shape is correct
-    expect(result.primaryArchetype).toBeDefined();
-    expect(
-      result.secondaryArchetype === null ||
-        typeof result.secondaryArchetype === "string",
-    ).toBe(true);
+    expect(result.primaryArchetype).toBe("HT");
+    // Secondary should be null since HT dominates
+    expect(result.secondaryArchetype).toBeNull();
   });
 
-  it("assigns secondary archetype when scores are close", () => {
-    // q8a → specialist: 3, craftsman: 2
-    // q1a → craftsman: 3, specialist: 2
-    // craftsman = 2+3 = 5, specialist = 3+2 = 5 → tied, both should show up
-    const answers = { q1: "q1a", q8: "q8a" };
+  it("assigns secondary archetype when scores are tied", () => {
+    // q1a → PC: 1, q1b → SO: 1 (can't both be answered, use separate questions)
+    // q1a → PC: 1, q2b → SO: 1 → tied at 1 each
+    const answers = { q1: "q1a", q2: "q2b" };
     const result = calculateScores(answers);
     expect(result.primaryArchetype).toBeDefined();
-    // With tied scores, secondary should be assigned (ratio = 1.0 ≥ 0.80)
+    // With tied scores, secondary should be assigned
     expect(result.secondaryArchetype).not.toBeNull();
-    // Both craftsman and specialist should be in the top two
-    const top = [result.primaryArchetype, result.secondaryArchetype];
-    expect(top).toContain("craftsman");
-    expect(top).toContain("specialist");
   });
 
   it("handles invalid option IDs gracefully", () => {
     const answers = { q1: "invalid_option_id" };
     const result = calculateScores(answers);
     // Should not throw, just ignore invalid option
-    expect(result.scores.craftsman).toBe(0);
+    expect(result.scores.PC).toBe(0);
+    expect(result.scores.HT).toBe(0);
   });
 
   it("handles unknown question IDs gracefully", () => {
     const answers = { unknown_question: "some_option" };
     const result = calculateScores(answers);
     expect(result.primaryArchetype).toBeDefined();
+  });
+
+  it("tiebreak order: HT beats SO when tied", () => {
+    // q1b → SO: 1, q2c → HT: 1 → tied at 1 each
+    const answers = { q1: "q1b", q2: "q2c" };
+    const result = calculateScores(answers);
+    // HT should win tiebreak over SO
+    expect(result.primaryArchetype).toBe("HT");
   });
 });
 
@@ -115,15 +111,15 @@ describe("quiz questions structure", () => {
     });
   });
 
-  it("all options have at least one weight", () => {
+  it("all options have at least one score weight", () => {
     QUIZ_QUESTIONS.forEach((q) => {
       q.options.forEach((o) => {
-        expect(Object.keys(o.weights).length).toBeGreaterThanOrEqual(1);
+        expect(Object.keys(o.scores).length).toBeGreaterThanOrEqual(1);
       });
     });
   });
 
-  it("total question count is 17", () => {
-    expect(QUIZ_QUESTIONS.length).toBe(17);
+  it("total question count is 20", () => {
+    expect(QUIZ_QUESTIONS.length).toBe(20);
   });
 });

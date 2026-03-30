@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// ─── Mock external side-effects before importing routers ─────────────────────
+// Mock external side-effects before importing routers
 
 vi.mock("./emailSender", () => ({
   sendEmail: vi.fn().mockResolvedValue({ success: true }),
-  // keep backward-compat alias in mock too
   sendGmailEmail: vi.fn().mockResolvedValue({ success: true }),
 }));
 
@@ -21,6 +20,9 @@ vi.mock("./db", () => ({
   updateEmailStatus: vi.fn().mockResolvedValue(undefined),
   saveQuizSubmission: vi.fn().mockResolvedValue(1),
   getQuizSubmissionById: vi.fn().mockResolvedValue(null),
+  getQuizSubmissionAnswers: vi.fn().mockResolvedValue([]),
+  getAllLeads: vi.fn().mockResolvedValue([]),
+  getAdminStats: vi.fn().mockResolvedValue({}),
 }));
 
 import { appRouter } from "./routers";
@@ -59,13 +61,13 @@ describe("email.capture", () => {
       submissionId: 1,
       email: "test@example.com",
       firstName: "Jake",
-      archetypeId: "craftsman",
+      archetypeId: "PC",
     });
     expect(saveEmailCapture).toHaveBeenCalledWith(
       expect.objectContaining({
         email: "test@example.com",
         firstName: "Jake",
-        archetypeId: "craftsman",
+        archetypeId: "PC",
         emailSent: "pending",
       }),
     );
@@ -76,7 +78,7 @@ describe("email.capture", () => {
     await caller.email.capture({
       submissionId: 1,
       email: "tradie@example.com",
-      archetypeId: "craftsman",
+      archetypeId: "PC",
     });
     expect(sendEmail).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -90,10 +92,10 @@ describe("email.capture", () => {
     await caller.email.capture({
       submissionId: 1,
       email: "tradie@example.com",
-      archetypeId: "craftsman",
+      archetypeId: "PC",
     });
     const callArgs = (sendEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(callArgs.subject).toContain("Craftsman");
+    expect(callArgs.subject).toContain("Precision Craftsman");
   });
 
   it("email text includes playbook link", async () => {
@@ -101,11 +103,11 @@ describe("email.capture", () => {
     await caller.email.capture({
       submissionId: 99,
       email: "tradie@example.com",
-      archetypeId: "operator",
+      archetypeId: "SO",
     });
     const callArgs = (sendEmail as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(callArgs.text).toContain("submissionId=99");
-    expect(callArgs.text).toContain("archetype=operator");
+    expect(callArgs.text).toContain("archetype=SO");
     expect(callArgs.text).toContain("unlocked=1");
   });
 
@@ -115,15 +117,15 @@ describe("email.capture", () => {
       submissionId: 5,
       email: "sheets@example.com",
       firstName: "Dave",
-      archetypeId: "hustler",
-      secondaryArchetypeId: "maverick",
+      archetypeId: "HT",
+      secondaryArchetypeId: "RB",
     });
     expect(logLeadToSheets).toHaveBeenCalledWith(
       expect.objectContaining({
         email: "sheets@example.com",
         firstName: "Dave",
-        primaryArchetype: "hustler",
-        secondaryArchetype: "maverick",
+        primaryArchetype: "HT",
+        secondaryArchetype: "RB",
         submissionId: 5,
       }),
     );
@@ -134,7 +136,7 @@ describe("email.capture", () => {
     await caller.email.capture({
       submissionId: 1,
       email: "success@example.com",
-      archetypeId: "leader",
+      archetypeId: "VC",
     });
     expect(updateEmailStatus).toHaveBeenCalledWith(42, "sent");
   });
@@ -148,7 +150,7 @@ describe("email.capture", () => {
     await caller.email.capture({
       submissionId: 1,
       email: "fail@example.com",
-      archetypeId: "specialist",
+      archetypeId: "RB",
     });
     expect(updateEmailStatus).toHaveBeenCalledWith(42, "failed");
   });
@@ -158,7 +160,7 @@ describe("email.capture", () => {
     const result = await caller.email.capture({
       submissionId: 7,
       email: "result@example.com",
-      archetypeId: "guardian",
+      archetypeId: "HT",
     });
     expect(result.success).toBe(true);
     expect(result.emailSent).toBe(true);
